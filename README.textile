@@ -1,0 +1,10 @@
+h2. Snipplets
+
+A dropdown menu to store snippets of data such as:
+*code
+*phone/ni/serial numbers
+*passwords
+*recipies
+*anything the user wants to define
+
+Items will be taggable and encyptable
