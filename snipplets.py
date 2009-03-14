@@ -26,16 +26,6 @@ import gtk.glade
 from mainsnipplet import MainSnippletHandlers
 from createnewsnipplet import CreateNewSnippletHandlers
 
-class WidgetsWrapper(object):
-    def __init__(self, glade_file, handler_class, parent):
-        """pass the handler_class to automatically bind glade handlers to their
-        corresponding functions"""
-        #self.widgets = gtk.glade.XML(glade_file)
-        #self.widgets.signal_autoconnect(handler_class.__dict__)
-        self.handler = handler_class(parent, glade_file)
-        
-    def get_widget(self, key):
-        return 1#self.widgets.get_widget(key)
     
 
 class Snipplet(object):
@@ -47,15 +37,14 @@ class Snipplet(object):
         self.create_main_window()
     
     def create_main_window(self):
-        self.main_wrapper = WidgetsWrapper(self.GLADE_DIR + "snipplets.glade",
-                                          MainSnippletHandlers, self)
-        self.main_window = self.main_wrapper.get_widget("window")
+        self.main_handler = MainSnippletHandlers(self, self.GLADE_DIR + "snipplets.glade")
+
         
         
     def create_new_snipplet_window(self):
-        self.create_wrapper = WidgetsWrapper(self.GLADE_DIR + "create_new_snipplet.glade",
-                                            CreateNewSnippletHandlers, self)
-        self.create_new_window = self.create_wrapper.get_widget("window")
+        self.create_handler = CreateNewSnippletHandlers(self, self.GLADE_DIR +
+                                                        "create_new_snipplet.glade")
+
 
 
 if __name__ == '__main__':
