@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Mar 15 12:13:26 2009 -->
+<!--Generated with glade3 3.4.5 on Sun Mar 15 20:07:52 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -17,35 +17,9 @@
             <property name="border_width">10</property>
             <property name="spacing">8</property>
             <child>
-              <widget class="GtkHBox" id="hbox1">
+              <widget class="GtkComboBox" id="type">
                 <property name="visible">True</property>
-                <property name="homogeneous">True</property>
-                <child>
-                  <widget class="GtkLabel" id="label2">
-                    <property name="width_request">150</property>
-                    <property name="visible">True</property>
-                    <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Type:</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="padding">30</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkComboBox" id="type">
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="padding">20</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
               </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-              </packing>
             </child>
             <child>
               <widget class="GtkHBox" id="hbox2">

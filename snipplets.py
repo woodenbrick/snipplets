@@ -40,6 +40,7 @@ class Snipplet(object):
         
         self.db = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
         self.create_main_window()
+        self.create_new_snipplet_window()
         
 
     

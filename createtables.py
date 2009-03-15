@@ -18,11 +18,10 @@
 #along with snipplets.  If not, see http://www.gnu.org/licenses/
 
 types = [
-    {"type" : "Code", "image" : "codeimage", "encrypt_default" : 0},
-    {"type" : "Chat log", "image" : "", "encrypt_default" : 0},
-    {"type" : "Key/Serial", "image" : "", "encrypt_default" : 0},
-    {"type" : "Password", "image" : "", "encrypt_default" : 1},
-    {"type" : "Personal", "image" : "", "encrypt_default" : 1},
+    {"type" : "Code", "image" : "ui/images/binary.png", "encrypt_default" : 0},
+    {"type" : "Chat log", "image" : "ui/images/kdmconfig.png", "encrypt_default" : 0},
+    {"type" : "Password/Key", "image" : "ui/images/password.png", "encrypt_default" : 1},
+    {"type" : "Personal", "image" : "ui/images/user_male.png", "encrypt_default" : 1},
     ]
 
 tables = [

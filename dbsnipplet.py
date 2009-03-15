@@ -24,12 +24,11 @@ import sqlite3
 class DbSnipplet(object):
     
     def __init__(self, database):
-        print database
         if not os.path.exists(database):
-            
             self.db, self.cursor = self.create_new_database(database)
         else:
             self.db = sqlite3.Connection(database)
+            self.cursor = self.db.cursor()
             
     
     def create_new_database(self, database):
@@ -47,7 +46,8 @@ class DbSnipplet(object):
     
     
     def return_types(self):
-        pass
+        self.cursor.execute("""SELECT * FROM types""")
+        return self.cursor.fetchall()
     
     
     

@@ -19,6 +19,7 @@
 
 import gtk
 import pygtk
+import gobject
 pygtk.require("2.0")
 
 from mainsnipplet import GladeHandler
@@ -31,8 +32,27 @@ class CreateNewSnippletHandlers(GladeHandler):
         GladeHandler.__init__(self, parent, glade_file)
         self.db = self.parent.db
         self.types = self.db.return_types()
+        self.fill_type_box(self.types)
         
 
+    
+    def fill_type_box(self, types):
+        liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf)
+        for type in types:
+            liststore.append([type[0], gtk.gdk.pixbuf_new_from_file(type[1])])
+        
+        combobox = self.wTree.get_widget("type")
+        combobox.set_model(liststore)
+        text = gtk.CellRendererText()
+        icon = gtk.CellRendererPixbuf()
+        combobox.pack_start(icon)
+        combobox.pack_end(text)
+        combobox.add_attribute(icon, "pixbuf", 1)
+        combobox.add_attribute(text, "text", 0)
+        combobox.set_active(0)
+
+
+    
     
     def on_window_destroy(self, widget):
         pass
