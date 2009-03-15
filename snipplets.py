@@ -29,20 +29,25 @@ import dbsnipplet
     
 
 class Snipplet(object):
+
     def __init__(self):
         self.GLADE_DIR = "ui/glade/"
-        self.HOME_DIR = os.path.join(os.environ['HOME'], ".snipplets")
-        if not os.path.exists(self.HOME_DIR):
+        self.HOME_DIR = os.path.join(os.environ['HOME'], ".snipplets" + os.sep)
+        try:
             os.mkdir(self.HOME_DIR)
-        self.db_snipplets = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
+        except:
+            pass
         
+        self.db = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
         self.create_main_window()
+        
+
     
     def create_main_window(self):
         self.main_handler = MainSnippletHandlers(self, "snipplets.glade")
 
-        
-        
+   
+
     def create_new_snipplet_window(self):
         self.create_handler = CreateNewSnippletHandlers(self, "create_new_snipplet.glade")
 

@@ -29,7 +29,7 @@ class CreateNewSnippletHandlers(GladeHandler):
     should be listed here so we can bind them all at once"""
     def __init__(self, parent, glade_file):
         GladeHandler.__init__(self, parent, glade_file)
-        self.db = self.parent.db_snipplets
+        self.db = self.parent.db
         self.types = self.db.return_types()
         
 
