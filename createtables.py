@@ -17,6 +17,13 @@
 #You should have received a copy of the GNU General Public License
 #along with snipplets.  If not, see http://www.gnu.org/licenses/
 
+types = [
+    {"type" : "Code", "image" : "codeimage", "encrypt_default" : 0},
+    {"type" : "Chat log", "image" : "", "encrypt_default" : 0},
+    {"type" : "Key/Serial", "image" : "", "encrypt_default" : 0},
+    {"type" : "Password", "image" : "", "encrypt_default" : 1},
+    {"type" : "Personal", "image" : "", "encrypt_default" : 1},
+    ]
 
 tables = [
     """
@@ -39,7 +46,13 @@ tables = [
     
     """
     CREATE TABLE IF NOT EXISTS `tagged` (
-    `snippletid int(8) NOT NULL,
-    tagid int(8) NOT NULL)
+    `snippletid` int(8) NOT NULL,
+    `tagid` int(8) NOT NULL)
+    """,
+    
     """
-    ]
+    CREATE TABLE IF NOT EXISTS `types` (
+    `type` varchar(40) NOT NULL,
+    `image` varchar(255),
+    `encrypt_default` boolean DEFAULT 0)
+    """]

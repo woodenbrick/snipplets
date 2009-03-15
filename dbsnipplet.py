@@ -24,10 +24,25 @@ import sqlite3
 class DbSnipplet(object):
     
     def __init__(self, database):
+        print database
         if not os.path.exists(database):
-            from createtables import tables
-            for table in tables: 
-                print table
+            
+            self.db, self.cursor = self.create_new_database(database)
+        else:
+            self.db = sqlite3.Connection(database)
+            
+    
+    def create_new_database(self, database):
+        db = sqlite3.Connection(database)
+        cursor = db.cursor()
+        import createtables
+        for query in createtables.tables:
+            cursor.execute(query)
+        cursor.executemany("""INSERT INTO types (type, image, encrypt_default)
+                           VALUES (:type, :image, :encrypt_default)""", createtables.types)
+        db.commit()
+
+        return db, cursor
     
     
     
