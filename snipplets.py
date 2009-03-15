@@ -25,7 +25,7 @@ import gtk.glade
 
 from mainsnipplet import MainSnippletHandlers
 from createnewsnipplet import CreateNewSnippletHandlers
-
+import dbsnipplet
     
 
 class Snipplet(object):
@@ -34,16 +34,17 @@ class Snipplet(object):
         self.HOME_DIR = os.path.join(os.environ['HOME'], ".snipplets")
         if not os.path.exists(self.HOME_DIR):
             os.mkdir(self.HOME_DIR)
+        self.db_snipplets = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
+        
         self.create_main_window()
     
     def create_main_window(self):
-        self.main_handler = MainSnippletHandlers(self, self.GLADE_DIR + "snipplets.glade")
+        self.main_handler = MainSnippletHandlers(self, "snipplets.glade")
 
         
         
     def create_new_snipplet_window(self):
-        self.create_handler = CreateNewSnippletHandlers(self, self.GLADE_DIR +
-                                                        "create_new_snipplet.glade")
+        self.create_handler = CreateNewSnippletHandlers(self, "create_new_snipplet.glade")
 
 
 

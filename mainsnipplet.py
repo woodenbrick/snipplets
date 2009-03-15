@@ -27,7 +27,7 @@ pygtk.require("2.0")
 class GladeHandler(object):
     """Super class for all handler classes"""
     def __init__(self, parent, glade_file):
-        self.wTree = gtk.glade.XML(glade_file)
+        self.wTree = gtk.glade.XML(parent.GLADE_DIR + glade_file)
         self.wTree.signal_autoconnect(self)
         self.parent = parent
 

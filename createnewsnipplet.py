@@ -29,7 +29,20 @@ class CreateNewSnippletHandlers(GladeHandler):
     should be listed here so we can bind them all at once"""
     def __init__(self, parent, glade_file):
         GladeHandler.__init__(self, parent, glade_file)
+        self.db = self.parent.db_snipplets
+        self.types = self.db.return_types()
+        
 
     
     def on_window_destroy(self, widget):
+        pass
+    
+    
+    
+    def on_save_new_clicked(self, widget):
+        pass
+    
+    
+    
+    def on_discard_new_clicked(self, widget):
         pass
