@@ -28,12 +28,16 @@ from mainsnipplet import GladeHandler
 class CreateNewSnippletHandlers(GladeHandler):
     """All handlers for glade created objects relating to the create-new-snipplet
     should be listed here so we can bind them all at once"""
+    
     def __init__(self, parent, glade_file):
+        #create layout
         GladeHandler.__init__(self, parent, glade_file)
         self.db = self.parent.db
         self.types = self.db.return_types()
         self.fill_type_box(self.types)
         
+        #set initial states
+        self.has_unsaved_changes = False
 
     
     def fill_type_box(self, types):

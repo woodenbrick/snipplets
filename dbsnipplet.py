@@ -45,21 +45,28 @@ class DbSnipplet(object):
     
     
     
+    
     def return_types(self):
         self.cursor.execute("""SELECT * FROM types""")
         return self.cursor.fetchall()
     
     
     
-    def add_new(self):
-        pass
+    def add_new(self, snipplet_obj):
+        self.cursor.execute("""INSERT INTO snipplets (type, description,
+                            data, encryption) VALUES (:type, :description, :data,
+                            :encryption)""", snipplet_obj)
+        self.db.commit()
     
     
     
-    def delete(self):
-        pass
+    def delete(self, snipplet_obj):
+        self.cursor.execute("""DELETE FROM snipplets WHERE snippletid=:snippletid""",
+                             snipplet_obj)
     
     
     
-    def edit(self):
-        pass
+    def edit(self, snipplet_obj):
+        self.cursor.execute("""UPDATE snipplets set type=:type, description=:description,
+                            data=:data, encryption=:encryption where
+                            snippletid=:snippletid""", snipplet_obj)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Mar 15 20:07:52 2009 -->
+<!--Generated with glade3 3.4.5 on Fri Mar 20 16:07:17 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -77,7 +77,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkFrame" id="Snippet:">
+              <widget class="GtkFrame" id="frame">
                 <property name="visible">True</property>
                 <property name="border_width">11</property>
                 <property name="label_xalign">0</property>
@@ -104,7 +104,7 @@
                 <child>
                   <widget class="GtkLabel" id="label5">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;frame1&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Snipplet:</property>
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>
@@ -204,7 +204,7 @@
         <child>
           <widget class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">&lt;b&gt;frame1&lt;/b&gt;</property>
+            <property name="label" translatable="yes">&lt;b&gt;New Snipplet&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </widget>
           <packing>
