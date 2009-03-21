@@ -35,9 +35,12 @@ class CreateNewSnippletHandlers(GladeHandler):
         self.db = self.parent.db
         self.types = self.db.return_types()
         self.fill_type_box(self.types)
-        
+        self.error_box = self.wTree.get_widget("error")
         #set initial states
         self.has_unsaved_changes = False
+        #feed in the widget names
+        self.snipplet = Snipplet()
+        self.snipplet.set_widgets(self.wTree)
 
     
     def fill_type_box(self, types):
@@ -64,9 +67,49 @@ class CreateNewSnippletHandlers(GladeHandler):
     
     
     def on_save_new_clicked(self, widget):
-        pass
+        missing = self.snipplet.return_missing_values()
+        if missing is None:
+            #save and close
+            pass
+        else:
+            self.error_box.set_value("Missing values: " + ','.join(missing))
+            
+
+        
+        
     
     
     
     def on_discard_new_clicked(self, widget):
         pass
+    
+
+class Snipplet(object):
+    
+    def __init__(self):
+        self.values = {"type" : None, "description" : None,
+                       "data" : None, "encryption" : None }
+        
+    
+    def set_widgets(self, tree):
+        """Pass the wTree and widgets will be autoconnected"""
+        self.widgets = self.values
+        for key, value in self.widgets.items():
+            self.widgets[key] = tree.get_widget(key)
+                    
+    
+    def return_missing_values(self):
+        """Returns missing required info keys, or none if everything is done"""
+        keys = []
+        for key, value in self.values.items():
+            if value is None:
+                keys.append(key)
+        if keys == []:
+            return None
+        return keys
+        
+    
+    def fill_snipplet(self):
+        """fills the snipplet with data from widgets set_widgets(must be run first)"""
+        for key, value in self.values.items():
+            self.values[key] = self.widgets[key].get_value()

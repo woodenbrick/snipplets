@@ -28,7 +28,7 @@ from createnewsnipplet import CreateNewSnippletHandlers
 import dbsnipplet
     
 
-class Snipplet(object):
+class RunSnipplets(object):
 
     def __init__(self):
         self.GLADE_DIR = "ui/glade/"
@@ -55,5 +55,5 @@ class Snipplet(object):
 
 
 if __name__ == '__main__':
-    snipplet = Snipplet()
+    Run_Snipplets()
     gtk.main()
