@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Mar 20 16:07:17 2009 -->
+<!--Generated with glade3 3.4.5 on Sun Mar 22 19:20:59 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -57,7 +57,7 @@
               <widget class="GtkHBox" id="hbox5">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkCheckButton" id="encrypted">
+                  <widget class="GtkCheckButton" id="encryption">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="label" translatable="yes">Encrypted</property>
@@ -90,7 +90,7 @@
                     <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <child>
-                      <widget class="GtkTextView" id="snipplet">
+                      <widget class="GtkTextView" id="data">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="border_width">12</property>

@@ -22,23 +22,22 @@ import pygtk
 import gobject
 pygtk.require("2.0")
 
-from mainsnipplet import GladeHandler
 
 
-class CreateNewSnippletHandlers(GladeHandler):
-    """All handlers for glade created objects relating to the create-new-snipplet
-    should be listed here so we can bind them all at once"""
-    
-    def __init__(self, parent, glade_file):
-        #create layout
-        GladeHandler.__init__(self, parent, glade_file)
+
+class CreateNewSnippletHandler():
+
+    def __init__(self, parent, glade_file, id=None):
+        self.wTree = gtk.glade.XML(parent.GLADE_DIR + glade_file)
+        self.wTree.signal_autoconnect(self)
+        self.parent = parent
         self.db = self.parent.db
         self.types = self.db.return_types()
         self.fill_type_box(self.types)
         self.error_box = self.wTree.get_widget("error")
-        #set initial states
+        
         self.has_unsaved_changes = False
-        #feed in the widget names
+        self.id = id
         self.snipplet = Snipplet()
         self.snipplet.set_widgets(self.wTree)
 
@@ -67,12 +66,19 @@ class CreateNewSnippletHandlers(GladeHandler):
     
     
     def on_save_new_clicked(self, widget):
+        self.snipplet.fill_snipplet()
         missing = self.snipplet.return_missing_values()
         if missing is None:
-            #save and close
-            pass
+            self.error_box.set_text("")
+            if self.id:
+                self.snipplet.values['snippletid'] = self.id
+                self.db.edit(self.snipplet.values)
+            else:
+                self.db.add_new(self.snipplet.values)
+
+            
         else:
-            self.error_box.set_value("Missing values: " + ','.join(missing))
+            self.error_box.set_text("Missing values: " + ','.join(missing))
             
 
         
@@ -87,13 +93,14 @@ class CreateNewSnippletHandlers(GladeHandler):
 class Snipplet(object):
     
     def __init__(self):
-        self.values = {"type" : None, "description" : None,
-                       "data" : None, "encryption" : None }
+        self.values = {"type" : 0, "description" : "",
+                       "data" : "", "encryption" : False }
         
     
     def set_widgets(self, tree):
         """Pass the wTree and widgets will be autoconnected"""
-        self.widgets = self.values
+        w = ["type", "description", "data", "encryption"]
+        self.widgets = dict(self.values)
         for key, value in self.widgets.items():
             self.widgets[key] = tree.get_widget(key)
                     
@@ -102,7 +109,7 @@ class Snipplet(object):
         """Returns missing required info keys, or none if everything is done"""
         keys = []
         for key, value in self.values.items():
-            if value is None:
+            if value is "":
                 keys.append(key)
         if keys == []:
             return None
@@ -112,4 +119,14 @@ class Snipplet(object):
     def fill_snipplet(self):
         """fills the snipplet with data from widgets set_widgets(must be run first)"""
         for key, value in self.values.items():
-            self.values[key] = self.widgets[key].get_value()
+            if key == "data":
+                buffer = self.widgets[key].get_buffer()
+                start, end = buffer.get_bounds()
+                text = buffer.get_text(start, end)
+                self.values[key] = buffer.get_text(start, end)
+            else:
+                try:
+                    self.values[key] = self.widgets[key].get_text()
+                except AttributeError:
+                    self.values[key] = self.widgets[key].get_active()
+        print 'end'

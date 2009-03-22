@@ -23,8 +23,8 @@ import pygtk
 pygtk.require("2.0")
 import gtk.glade
 
-from mainsnipplet import MainSnippletHandlers
-from createnewsnipplet import CreateNewSnippletHandlers
+from mainsnipplet import MainSnippletHandler
+from createnewsnipplet import CreateNewSnippletHandler
 import dbsnipplet
     
 
@@ -45,15 +45,15 @@ class RunSnipplets(object):
 
     
     def create_main_window(self):
-        self.main_handler = MainSnippletHandlers(self, "snipplets.glade")
+        self.main_handler = MainSnippletHandler(self, "snipplets.glade")
 
    
 
     def create_new_snipplet_window(self):
-        self.create_handler = CreateNewSnippletHandlers(self, "create_new_snipplet.glade")
+        self.create_handler = CreateNewSnippletHandler(self, "create_new_snipplet.glade")
 
 
 
 if __name__ == '__main__':
-    Run_Snipplets()
+    RunSnipplets()
     gtk.main()
