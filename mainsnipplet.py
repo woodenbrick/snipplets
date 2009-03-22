@@ -46,9 +46,14 @@ class MainSnippletHandler():
         
         
     def show_snipplets(self):
+        """fetches and calculates all types,tags and snipplets info and creates
+        snipplet objects"""
         types = self.db.return_all("types")
         tags = self.db.return_all("tags")
         snipplets = self.db.return_all("snipplets")
         
         for type in types:
-            
+        
+        
+class Snipplet(object):
+    pass

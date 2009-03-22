@@ -77,11 +77,5 @@ class DbSnipplet(object):
         self.db.commit()
         
         
-    def increment(self, snipplet_obj, id=None):
-        """Increments the tag/type count of this snipplet pass an id
-        to first check edited tags/types and adjust that also."""
-        if id is not None:
-            self.cursor.execute("""SELECT * FROM snipplets where snippletid= :snippletid"""
-                                , snipplet_obj)
-            row = self.cursor.fetchone()
+
             

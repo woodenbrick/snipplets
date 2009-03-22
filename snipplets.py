@@ -51,6 +51,7 @@ class RunSnipplets(object):
 
     def create_new_snipplet_window(self):
         self.create_handler = CreateNewSnippletHandler(self, "create_new_snipplet.glade")
+        
 
 
 

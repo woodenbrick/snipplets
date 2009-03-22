@@ -38,7 +38,7 @@ class CreateNewSnippletHandler():
         
         self.has_unsaved_changes = False
         self.id = id
-        self.snipplet = Snipplet()
+        self.snipplet = NewSnipplet()
         self.snipplet.set_widgets(self.wTree)
 
     
@@ -92,7 +92,8 @@ class CreateNewSnippletHandler():
         pass
     
 
-class Snipplet(object):
+class NewSnipplet(object):
+    """Used to create a New Snipplet or Edit an Old one"""
     
     def __init__(self):
         self.values = {"type" : 0, "description" : "",
@@ -131,4 +132,3 @@ class Snipplet(object):
                     self.values[key] = self.widgets[key].get_text()
                 except AttributeError:
                     self.values[key] = self.widgets[key].get_active()
-        print 'end'
