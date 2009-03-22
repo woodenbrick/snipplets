@@ -38,7 +38,10 @@ class DbSnipplet(object):
         for query in createtables.tables:
             cursor.execute(query)
         cursor.executemany("""INSERT INTO types (type, image, encrypt_default)
-                           VALUES (:type, :image, :encrypt_default)""", createtables.types)
+                           VALUES (:type, :image, :encrypt_default)""",
+                           createtables.types)
+        cursor.executemany("""INSERT INTO typecount (type) VALUES (:type)""",
+                           createtables.types)
         db.commit()
 
         return db, cursor
@@ -46,8 +49,8 @@ class DbSnipplet(object):
     
     
     
-    def return_types(self):
-        self.cursor.execute("""SELECT * FROM types""")
+    def return_all(self, table):
+        self.cursor.execute("""SELECT * FROM ?""", (table,))
         return self.cursor.fetchall()
     
     
@@ -63,6 +66,7 @@ class DbSnipplet(object):
     def delete(self, snipplet_obj):
         self.cursor.execute("""DELETE FROM snipplets WHERE snippletid=:snippletid""",
                              snipplet_obj)
+        self.db.commit()
     
     
     
@@ -70,3 +74,8 @@ class DbSnipplet(object):
         self.cursor.execute("""UPDATE snipplets set type=:type, description=:description,
                             data=:data, encryption=:encryption where
                             snippletid=:snippletid""", snipplet_obj)
+        self.db.commit()
+        
+        
+
+            

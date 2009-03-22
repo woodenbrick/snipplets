@@ -27,12 +27,11 @@ types = [
 tables = [
     """
     CREATE TABLE IF NOT EXISTS `snipplets` (
-    `snippletid` int(8) NOT NULL,
+    `snippletid` int(8) PRIMARY KEY,
     `type` varchar(30) NOT NULL,
     `description` varchar(255),
     `data` blob,
-    `encryption` boolean DEFAULT 0,
-    PRIMARY KEY (`snippletid`))
+    `encryption` boolean DEFAULT 0)
     """,
     
     """
@@ -54,4 +53,8 @@ tables = [
     `type` varchar(40) NOT NULL,
     `image` varchar(255),
     `encrypt_default` boolean DEFAULT 0)
-    """]
+    """,
+    
+    """CREATE TABLE IF NOT EXISTS `typecount` (
+    `type` varchar(40) NOT NULL,
+    `count` int(8) DEFAULT 0)]

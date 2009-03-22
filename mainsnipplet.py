@@ -23,23 +23,17 @@ pygtk.require("2.0")
 
 
 
-
-class GladeHandler(object):
-    """Super class for all handler classes"""
+class MainSnippletHandler():
+    
     def __init__(self, parent, glade_file):
         self.wTree = gtk.glade.XML(parent.GLADE_DIR + glade_file)
         self.wTree.signal_autoconnect(self)
         self.parent = parent
+        self.db = self.parent.db
+        self.type_view = self.wTree.get_widget("types")
+        self.tag_view = self.wTree.get_widget("tags")
+        self.snipplet_view = self.wTree.get_widget("snipplets")
 
-
-
-
-
-class MainSnippletHandlers(GladeHandler):
-    """All handlers for glade created objects should be listed here
-    so we can bind them all at once"""
-    def __init__(self, parent, glade_file):
-        GladeHandler.__init__(self, parent, glade_file)
 
     
     def on_window_destroy(self, widget):
@@ -51,3 +45,15 @@ class MainSnippletHandlers(GladeHandler):
         self.parent.create_new_snipplet_window()
         
         
+    def show_snipplets(self):
+        """fetches and calculates all types,tags and snipplets info and creates
+        snipplet objects"""
+        types = self.db.return_all("types")
+        tags = self.db.return_all("tags")
+        snipplets = self.db.return_all("snipplets")
+        
+        for type in types:
+        
+        
+class Snipplet(object):
+    pass
