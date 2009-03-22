@@ -72,9 +72,11 @@ class CreateNewSnippletHandler():
             self.error_box.set_text("")
             if self.id:
                 self.snipplet.values['snippletid'] = self.id
+                self.db.increment(self.snipplet.values, id=self.id)
                 self.db.edit(self.snipplet.values)
             else:
                 self.db.add_new(self.snipplet.values)
+                self.db.increment(self.snipplet.values)
 
             
         else:

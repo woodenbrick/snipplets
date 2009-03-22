@@ -38,7 +38,10 @@ class DbSnipplet(object):
         for query in createtables.tables:
             cursor.execute(query)
         cursor.executemany("""INSERT INTO types (type, image, encrypt_default)
-                           VALUES (:type, :image, :encrypt_default)""", createtables.types)
+                           VALUES (:type, :image, :encrypt_default)""",
+                           createtables.types)
+        cursor.executemany("""INSERT INTO typecount (type) VALUES (:type)""",
+                           createtables.types)
         db.commit()
 
         return db, cursor
@@ -46,8 +49,8 @@ class DbSnipplet(object):
     
     
     
-    def return_types(self):
-        self.cursor.execute("""SELECT * FROM types""")
+    def return_all(self, table):
+        self.cursor.execute("""SELECT * FROM ?""", (table,))
         return self.cursor.fetchall()
     
     
@@ -72,3 +75,13 @@ class DbSnipplet(object):
                             data=:data, encryption=:encryption where
                             snippletid=:snippletid""", snipplet_obj)
         self.db.commit()
+        
+        
+    def increment(self, snipplet_obj, id=None):
+        """Increments the tag/type count of this snipplet pass an id
+        to first check edited tags/types and adjust that also."""
+        if id is not None:
+            self.cursor.execute("""SELECT * FROM snipplets where snippletid= :snippletid"""
+                                , snipplet_obj)
+            row = self.cursor.fetchone()
+            
