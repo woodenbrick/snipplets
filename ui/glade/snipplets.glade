@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sat Mar 14 19:10:34 2009 -->
+<!--Generated with glade3 3.4.5 on Sat Mar 14 22:00:07 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -42,6 +42,19 @@
             <child>
               <widget class="GtkHBox" id="hbox2">
                 <property name="visible">True</property>
+                <child>
+                  <widget class="GtkButton" id="create_snipplet">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="label" translatable="yes">Create New Snipplet</property>
+                    <property name="response_id">0</property>
+                    <signal name="clicked" handler="on_create_snipplet_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
                 <child>
                   <widget class="GtkEntry" id="search">
                     <property name="height_request">30</property>
