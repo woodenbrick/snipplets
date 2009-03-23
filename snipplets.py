@@ -40,7 +40,7 @@ class RunSnipplets(object):
         
         self.db = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
         self.create_main_window()
-        self.create_new_snipplet_window()
+        #self.create_new_snipplet_window()
         
 
     
@@ -48,11 +48,14 @@ class RunSnipplets(object):
         self.main_handler = MainSnippletHandler(self, "snipplets.glade")
 
    
+    def update_selection_view(self, data):
+        self.main_handler.update_selection_view(data)
+        
 
     def create_new_snipplet_window(self):
         self.create_handler = CreateNewSnippletHandler(self, "create_new_snipplet.glade")
-        
 
+    
 
 
 if __name__ == '__main__':

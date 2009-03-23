@@ -21,7 +21,7 @@ import gtk
 import pygtk
 pygtk.require("2.0")
 
-
+import sniptypes
 
 class MainSnippletHandler():
     
@@ -32,8 +32,14 @@ class MainSnippletHandler():
         self.db = self.parent.db
         self.type_view = self.wTree.get_widget("types")
         self.tag_view = self.wTree.get_widget("tags")
-        self.snipplet_view = self.wTree.get_widget("snipplets")
-
+        self.selection_view = self.wTree.get_widget("selection")
+        self.data_view = self.wTree.get_widget("data")
+        
+        self.types = sniptypes.Types(self.db.return_all("types"))
+        self.tags = sniptypes.Tags(self.db.return_all("tags"))
+        self.create_selection_area()
+        self.create_view_area()
+        
 
     
     def on_window_destroy(self, widget):
@@ -44,16 +50,76 @@ class MainSnippletHandler():
     def on_create_snipplet_clicked(self, widget):
         self.parent.create_new_snipplet_window()
         
+    
+    
+    def create_selection_area(self):
+        self.selection_columns = ["id", "", "Description", "Modified", "Encryption"]
+        self.selection_liststore = gtk.ListStore(int, gtk.gdk.Pixbuf, str, str, int)
+        self.selection_view.set_model(self.selection_liststore)
+        
+        snipplets = self.db.return_snipplet_selection()
+        for row in snipplets:
+            #liststore: int, gtk.gdk.Pixbuf, str, int, str
+            #rows: id, typeimage, description, encryption, modified
+            row1 = gtk.gdk.pixbuf_new_from_file(row[1])
+            self.selection_liststore.append([row[0], row1, row[2], row[3], row[4]])
+        
+        #append to columns
+        i = 0
+        for column in self.selection_columns:
+            col = gtk.TreeViewColumn(column)
+            if i == 1:
+                cell = gtk.CellRendererPixbuf()
+            else:    
+                cell = gtk.CellRendererText()
+            col.pack_start(cell, False)
+            
+            if i == 1:
+                col.set_attributes(cell, pixbuf=i)
+            else:
+                col.set_attributes(cell, text=i)
+            
+            col.set_sizing(gtk.TREE_VIEW_COLUMN_GROW_ONLY)
+            col.set_min_width(30)
+            col.set_max_width(300)
+            col.set_resizable(True)
+            col.set_spacing(10)
+            self.selection_view.append_column(col)
+            if i == 0:
+                col.set_visible(False)
+            i +=1
+        
+    def create_view_area(self):
+        self.snipplet_data_liststore = gtk.ListStore(str)
+        self.data_view.set_model(self.snipplet_data_liststore)
+        column = gtk.TreeViewColumn()
+        cell = gtk.CellRendererText()
+        column.pack_start(cell, False)
+        column.set_attributes(cell, text=0)
+        self.data_view.append_column(column)
+    
+    def update_selection_view(self, dict):
+        """called when the user creates a new snipplet"""
+        row = self.db.return_most_recent_snipplet()
+        row1 = gtk.gdk.pixbuf_new_from_file(row[1])
+        self.selection_liststore.append([row[0], row1, row[2], row[3], row[4]])
+
+    
+    def on_selection_cursor_changed(self, widget):
+        """Fill the data box with the snipplet selected"""
+        self.snipplet_data_liststore.clear()
+        model, iter = self.selection_view.get_selection().get_selected()
+        snipid = model.get_value(iter, 0)
+        data = self.db.return_snipplet_data(snipid)
+        self.snipplet_data_liststore.append([data[0]])
+            
+    
         
     def show_snipplets(self):
         """fetches and calculates all types,tags and snipplets info and creates
         snipplet objects"""
         types = self.db.return_all("types")
         tags = self.db.return_all("tags")
-        snipplets = self.db.return_all("snipplets")
         
-        for type in types:
+            
         
-        
-class Snipplet(object):
-    pass

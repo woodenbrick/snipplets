@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Mar 22 19:20:59 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Mar 23 14:25:02 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -180,7 +180,7 @@
                     <property name="label" translatable="yes">gtk-cancel</property>
                     <property name="use_stock">True</property>
                     <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_discard_new_clicked"/>
+                    <signal name="clicked" handler="on_window_destroy"/>
                   </widget>
                   <packing>
                     <property name="position">1</property>

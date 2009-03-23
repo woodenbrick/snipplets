@@ -32,7 +32,7 @@ class CreateNewSnippletHandler():
         self.wTree.signal_autoconnect(self)
         self.parent = parent
         self.db = self.parent.db
-        self.types = self.db.return_types()
+        self.types = self.db.return_all("types")
         self.fill_type_box(self.types)
         self.error_box = self.wTree.get_widget("error")
         
@@ -45,7 +45,7 @@ class CreateNewSnippletHandler():
     def fill_type_box(self, types):
         liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf)
         for type in types:
-            liststore.append([type[0], gtk.gdk.pixbuf_new_from_file(type[1])])
+            liststore.append([type[1], gtk.gdk.pixbuf_new_from_file(type[2])])
         
         combobox = self.wTree.get_widget("type")
         combobox.set_model(liststore)
@@ -59,11 +59,10 @@ class CreateNewSnippletHandler():
 
 
     
-    
     def on_window_destroy(self, widget):
-        pass
-    
-    
+        self.wTree.get_widget("window").destroy()
+        return True
+  
     
     def on_save_new_clicked(self, widget):
         self.snipplet.fill_snipplet()
@@ -72,31 +71,22 @@ class CreateNewSnippletHandler():
             self.error_box.set_text("")
             if self.id:
                 self.snipplet.values['snippletid'] = self.id
-                self.db.increment(self.snipplet.values, id=self.id)
                 self.db.edit(self.snipplet.values)
             else:
                 self.db.add_new(self.snipplet.values)
-                self.db.increment(self.snipplet.values)
-
+            #ask parent to update main selection area
+            self.parent.update_selection_view(self.snipplet.values)
+            self.on_window_destroy(None)
             
         else:
             self.error_box.set_text("Missing values: " + ','.join(missing))
-            
-
-        
-        
-    
-    
-    
-    def on_discard_new_clicked(self, widget):
-        pass
     
 
 class NewSnipplet(object):
     """Used to create a New Snipplet or Edit an Old one"""
     
     def __init__(self):
-        self.values = {"type" : 0, "description" : "",
+        self.values = {"type" : 1, "description" : "",
                        "data" : "", "encryption" : False }
         
     
@@ -132,3 +122,4 @@ class NewSnipplet(object):
                     self.values[key] = self.widgets[key].get_text()
                 except AttributeError:
                     self.values[key] = self.widgets[key].get_active()
+        self.values['type'] = self.values['type'] + 1

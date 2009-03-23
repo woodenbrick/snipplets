@@ -28,7 +28,7 @@ test_data = [
     {"description" : "Mommas fried chicken", "data" : "2 eggs, 1 chicken",
      "encryption" : 0, "type" : 2},
     {"description" : "Python code", "data" : "def Fuckstick():",
-     "encryption" : 0, "type" : 0},
+     "encryption" : 0, "type" : 1},
     {"description" : "GPG Key", "data" : "123123iojasdoij231",
      "encryption" : 0, "type" : 3}]
 
