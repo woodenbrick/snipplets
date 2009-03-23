@@ -7,4 +7,4 @@ A dropdown menu to store snippets of data such as:
 * recipies
 * anything the user wants to define
 
-Items will be taggable and encyptable
+Items will be taggable and encyptable.
