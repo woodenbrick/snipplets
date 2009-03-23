@@ -16,7 +16,7 @@
 #
 #You should have received a copy of the GNU General Public License
 #along with snipplets.  If not, see http://www.gnu.org/licenses/
-
+import time
 types = [
     {"type" : "Code", "image" : "ui/images/binary.png", "encrypt_default" : 0},
     {"type" : "Chat log", "image" : "ui/images/kdmconfig.png", "encrypt_default" : 0},
@@ -24,14 +24,23 @@ types = [
     {"type" : "Personal", "image" : "ui/images/user_male.png", "encrypt_default" : 1},
     ]
 
+test_data = [
+    {"description" : "Mommas fried chicken", "data" : "2 eggs, 1 chicken",
+     "encryption" : 0, "type" : 2},
+    {"description" : "Python code", "data" : "def Fuckstick():",
+     "encryption" : 0, "type" : 0},
+    {"description" : "GPG Key", "data" : "123123iojasdoij231",
+     "encryption" : 0, "type" : 3}]
+
 tables = [
     """
     CREATE TABLE IF NOT EXISTS `snipplets` (
-    `snippletid` int(8) PRIMARY KEY,
-    `type` varchar(30) NOT NULL,
+    `snippletid` INTEGER PRIMARY KEY,
+    `typeid` int(6) NOT NULL,
     `description` varchar(255),
     `data` blob,
-    `encryption` boolean DEFAULT 0)
+    `encryption` boolean DEFAULT 0,
+    `modified` date NOT NULL)
     """,
     
     """
@@ -44,17 +53,15 @@ tables = [
     
     """
     CREATE TABLE IF NOT EXISTS `tagged` (
-    `snippletid` int(8) NOT NULL,
+    `snippletid` INTEGER PRIMARY KEY,
     `tagid` int(8) NOT NULL)
     """,
     
     """
     CREATE TABLE IF NOT EXISTS `types` (
+    `typeid` INTEGER PRIMARY KEY,
     `type` varchar(40) NOT NULL,
     `image` varchar(255),
     `encrypt_default` boolean DEFAULT 0)
     """,
-    
-    """CREATE TABLE IF NOT EXISTS `typecount` (
-    `type` varchar(40) NOT NULL,
-    `count` int(8) DEFAULT 0)]
+    ]
