@@ -112,6 +112,12 @@ class MainSnippletHandler():
         snipid = model.get_value(iter, 0)
         data = self.db.return_snipplet_data(snipid)
         self.snipplet_data_liststore.append([data[0]])
+        
+    def on_selection_row_activated(self, widget, path, column):
+        """User double clicks, show the current snipplet in an edit box"""
+        model, iter = self.selection_view.get_selection().get_selected()
+        snipid = model.get_value(iter, 0)
+        self.parent.create_new_snipplet_window(snipid)
             
     
         

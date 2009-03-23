@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Mar 23 14:56:52 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Mar 23 19:50:35 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -114,6 +114,7 @@
                   <widget class="GtkTreeView" id="selection">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <signal name="row_activated" handler="on_selection_row_activated"/>
                     <signal name="cursor_changed" handler="on_selection_cursor_changed"/>
                   </widget>
                 </child>

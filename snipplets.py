@@ -52,8 +52,8 @@ class RunSnipplets(object):
         self.main_handler.update_selection_view(data)
         
 
-    def create_new_snipplet_window(self):
-        self.create_handler = CreateNewSnippletHandler(self, "create_new_snipplet.glade")
+    def create_new_snipplet_window(self, id=None):
+        self.create_handler = CreateNewSnippletHandler(self, "create_new_snipplet.glade", id=id)
 
     
 

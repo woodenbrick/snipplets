@@ -76,7 +76,8 @@ class DbSnipplet(object):
     
     def return_snipplet_data(self, id):
         """Retrieves the data for snipplet with this id"""
-        self.cursor.execute("""select data from snipplets where snippletid=?""", (id,))
+        self.cursor.execute("""select data, typeid, description, encryption
+                            from snipplets where snippletid=?""", (id,))
         return self.cursor.fetchone()
     
     

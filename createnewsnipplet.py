@@ -40,7 +40,9 @@ class CreateNewSnippletHandler():
         self.id = id
         self.snipplet = NewSnipplet()
         self.snipplet.set_widgets(self.wTree)
-
+        if self.id is not None:
+            data = self.db.return_snipplet_data(self.id)
+            self.snipplet.old_snipplet_reborn(data)
     
     def fill_type_box(self, types):
         liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf)
@@ -123,3 +125,11 @@ class NewSnipplet(object):
                 except AttributeError:
                     self.values[key] = self.widgets[key].get_active()
         self.values['type'] = self.values['type'] + 1
+        
+    
+    def old_snipplet_reborn(self, data):
+        buffer = self.widgets["data"].get_buffer()
+        buffer.set_text(data[0])
+        self.widgets["type"].set_active(data[1] - 1)
+        self.widgets["description"].set_text(data[2])
+        self.widgets["encryption"].set_active(data[3])

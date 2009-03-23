@@ -27,7 +27,7 @@ types = [
 test_data = [
     {"description" : "Mommas fried chicken", "data" : "2 eggs, 1 chicken",
      "encryption" : 0, "type" : 2},
-    {"description" : "Python code", "data" : "def Fuckstick():",
+    {"description" : "Python code", "data" : "def Test():",
      "encryption" : 0, "type" : 1},
     {"description" : "GPG Key", "data" : "123123iojasdoij231",
      "encryption" : 0, "type" : 3}]
