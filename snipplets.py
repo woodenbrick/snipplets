@@ -26,7 +26,7 @@ import gtk.glade
 from mainsnipplet import MainSnippletHandler
 from createnewsnipplet import CreateNewSnippletHandler
 import dbsnipplet
-    
+import codecompletion
 
 class RunSnipplets(object):
 
@@ -39,17 +39,18 @@ class RunSnipplets(object):
             pass
         
         self.db = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
-        self.create_main_window()
-        #self.create_new_snipplet_window()
+        #define codecompletion object here for use by all children
+        self.code_syntax = codecompletion.CodeCompletion(self.db)
         
+        self.create_main_window()        
 
     
     def create_main_window(self):
         self.main_handler = MainSnippletHandler(self, "snipplets.glade")
 
    
-    def update_selection_view(self, data):
-        self.main_handler.update_selection_view(data)
+    def update_selection_view(self, data, id):
+        self.main_handler.update_selection_view(data, id)
         
 
     def create_new_snipplet_window(self, id=None):

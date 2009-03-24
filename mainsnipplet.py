@@ -29,6 +29,7 @@ class MainSnippletHandler():
         self.wTree.signal_autoconnect(self)
         self.parent = parent
         self.db = self.parent.db
+        self.code_syntax = self.parent.code_syntax
         self.type_view = self.wTree.get_widget("types")
         self.tag_view = self.wTree.get_widget("tags")
         self.selection_view = self.wTree.get_widget("selection")
@@ -37,7 +38,7 @@ class MainSnippletHandler():
         #self.types = sniptypes.Types(self.db.return_all("types"))
         #self.tags = sniptypes.Tags(self.db.return_all("tags"))
         self.create_selection_area()
-        self.create_view_area()
+        #self.create_view_area()
         
 
     
@@ -88,34 +89,42 @@ class MainSnippletHandler():
                 col.set_visible(False)
             i +=1
         
-    def create_view_area(self):
-        self.snipplet_data_liststore = gtk.ListStore(str)
-        self.data_view.set_model(self.snipplet_data_liststore)
-        column = gtk.TreeViewColumn()
-        cell = gtk.CellRendererText()
-        column.pack_start(cell, False)
-        column.set_attributes(cell, text=0)
-        self.data_view.append_column(column)
+    #def create_view_area(self):
+    #    self.snipplet_data_liststore = gtk.ListStore(str)
+    #    self.data_view.set_model(self.snipplet_data_liststore)
+    #    column = gtk.TreeViewColumn()
+    #    cell = gtk.CellRendererText()
+    #    column.pack_start(cell, False)
+    #    column.set_attributes(cell, text=0)
+    #    self.data_view.append_column(column)
     
-    def update_selection_view(self, dict):
+    def update_selection_view(self, dict, id=None):
         """called when the user creates a new snipplet"""
         row = self.db.return_most_recent_snipplet()
         row1 = gtk.gdk.pixbuf_new_from_file(row[1])
-        self.selection_liststore.append([row[0], row1, row[2], row[3], row[4]])
+        #if we have an id, it means it was an edited so dont add again just update
+        if id:
+            self.selection_liststore.remove(self.edit_iter)
+        self.selection_liststore.prepend([row[0], row1, row[2], row[3], row[4]])
 
     
     def on_selection_cursor_changed(self, widget):
         """Fill the data box with the snipplet selected"""
-        self.snipplet_data_liststore.clear()
+        #self.snipplet_data_liststore.clear()
         model, iter = self.selection_view.get_selection().get_selected()
         snipid = model.get_value(iter, 0)
         data = self.db.return_snipplet_data(snipid)
-        self.snipplet_data_liststore.append([data[0]])
+        #check if we have a code snipplet
+        if data[1] == 1:
+            self.data_view.set_buffer(self.code_syntax.get_syntax(data[4]))
+        self.data_view.get_buffer().set_text(data[0])
         
     def on_selection_row_activated(self, widget, path, column):
         """User double clicks, show the current snipplet in an edit box"""
         model, iter = self.selection_view.get_selection().get_selected()
         snipid = model.get_value(iter, 0)
+        #save iterator for later use
+        self.edit_iter = iter
         self.parent.create_new_snipplet_window(snipid)
             
     

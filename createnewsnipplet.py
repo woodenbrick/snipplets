@@ -20,19 +20,19 @@
 import gtk
 import pygtk
 import gobject
-from gtkcodebuffer import CodeBuffer, SyntaxLoader
 pygtk.require("2.0")
-
+import codecompletion
 
 class CreateNewSnippletHandler():
 
     def __init__(self, parent, glade_file, id=None):
         self.wTree = gtk.glade.XML(parent.GLADE_DIR + glade_file)
-        self.wTree.signal_autoconnect(self)
         self.parent = parent
         self.db = self.parent.db
         self.types = self.db.return_all("types")
+        self.code_syntax = parent.code_syntax
         self.fill_type_box(self.types)
+        self.fill_code_box()
         self.error_box = self.wTree.get_widget("error")
         self.has_unsaved_changes = False
         self.id = id
@@ -41,6 +41,10 @@ class CreateNewSnippletHandler():
         if self.id is not None:
             data = self.db.return_snipplet_data(self.id)
             self.snipplet.old_snipplet_reborn(data)
+        #run so we know if we should hide or show the code box
+        self.on_type_changed(None)
+        
+        self.wTree.signal_autoconnect(self)
    
     def on_type_changed(self, widget):
         #checks if we are using code, if so we will use a code buffer
@@ -48,20 +52,20 @@ class CreateNewSnippletHandler():
         start, end = old_buff.get_bounds()
         text = old_buff.get_text(start, end)
         if self.wTree.get_widget("type").get_active() == 0:    
-            #we need some way to check the language either user defined
-            #or automatic check
-            lang = SyntaxLoader("php")
-            buff = CodeBuffer(lang=lang)
+            self.wTree.get_widget("code_syntax").show()
+            active_code = self.wTree.get_widget("code_syntax").get_active()
+            buff = self.code_syntax.get_syntax(active_code)
         else:
+            self.wTree.get_widget("code_syntax").hide()
             buff = gtk.TextBuffer()
         self.wTree.get_widget("data").set_buffer(buff)
         buff.set_text(text)
-        
+       
     def fill_type_box(self, types):
         liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf)
         for type in types:
             liststore.append([type[1], gtk.gdk.pixbuf_new_from_file(type[2])])
-        
+         
         combobox = self.wTree.get_widget("type")
         combobox.set_model(liststore)
         text = gtk.CellRendererText()
@@ -72,6 +76,20 @@ class CreateNewSnippletHandler():
         combobox.add_attribute(text, "text", 0)
         combobox.set_active(0)
 
+
+    def fill_code_box(self):
+        #i may include pics of languages in the future but not so important
+        liststore = gtk.ListStore(gobject.TYPE_STRING)
+        for lang in self.code_syntax.filetypes:
+            liststore.append([lang])
+
+        combobox = self.wTree.get_widget("code_syntax")
+        combobox.set_model(liststore)
+        text = gtk.CellRendererText()
+        combobox.pack_start(text)
+        combobox.add_attribute(text, "text", 0)
+        combobox.set_active(0)
+       
 
     
     def on_window_destroy(self, widget):
@@ -90,9 +108,10 @@ class CreateNewSnippletHandler():
             else:
                 self.db.add_new(self.snipplet.values)
             #ask parent to update main selection area
-            self.parent.update_selection_view(self.snipplet.values)
-            self.on_window_destroy(None)
+            self.parent.update_selection_view(self.snipplet.values, self.id)
+            #update db if it is a code piece to say which language was last used
             
+            self.on_window_destroy(None)
         else:
             self.error_box.set_text("Missing values: " + ','.join(missing))
     
@@ -102,12 +121,11 @@ class NewSnipplet(object):
     
     def __init__(self):
         self.values = {"type" : 1, "description" : "",
-                       "data" : "", "encryption" : False }
+                       "data" : "", "code_syntax" : "", "encryption" : False }
         
     
     def set_widgets(self, tree):
         """Pass the wTree and widgets will be autoconnected"""
-        w = ["type", "description", "data", "encryption"]
         self.widgets = dict(self.values)
         for key, value in self.widgets.items():
             self.widgets[key] = tree.get_widget(key)
@@ -118,6 +136,8 @@ class NewSnipplet(object):
         keys = []
         for key, value in self.values.items():
             if value is "":
+                if key == "code_syntax" and self.values["type"] != 0:
+                    continue
                 keys.append(key)
         if keys == []:
             return None
@@ -126,19 +146,18 @@ class NewSnipplet(object):
     
     def fill_snipplet(self):
         """fills the snipplet with data from widgets set_widgets(must be run first)"""
-        for key, value in self.values.items():
-            if key == "data":
-                buffer = self.widgets[key].get_buffer()
-                start, end = buffer.get_bounds()
-                text = buffer.get_text(start, end)
-                self.values[key] = buffer.get_text(start, end)
-            else:
-                try:
-                    self.values[key] = self.widgets[key].get_text()
-                except AttributeError:
-                    self.values[key] = self.widgets[key].get_active()
-        self.values['type'] = self.values['type'] + 1
+        buffer = self.widgets["data"].get_buffer()
+        start, end = buffer.get_bounds()
+        text = buffer.get_text(start, end)
+        self.values["data"] = buffer.get_text(start, end)
         
+        self.values["description"] = self.widgets["description"].get_text()
+        self.values["type"] = self.widgets["type"].get_active() + 1
+        self.values["encryption"] = self.widgets["encryption"].get_active()
+        #if self.values["type"] == 1:
+        self.values["code_syntax"] = self.widgets["code_syntax"].get_active()
+        #else:
+        #    self.values["code_syntax"] = ""
     
     def old_snipplet_reborn(self, data):
         buffer = self.widgets["data"].get_buffer()
@@ -146,3 +165,6 @@ class NewSnipplet(object):
         self.widgets["type"].set_active(data[1] - 1)
         self.widgets["description"].set_text(data[2])
         self.widgets["encryption"].set_active(data[3])
+        if data[1] - 1 == 0:
+            #code widget
+            self.widgets["code_syntax"].set_active(data[4])

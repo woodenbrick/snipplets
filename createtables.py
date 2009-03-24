@@ -32,6 +32,13 @@ test_data = [
     {"description" : "GPG Key", "data" : "123123iojasdoij231",
      "encryption" : 0, "type" : 3}]
 
+languages = ["texinfo", "octave", "sql", "latex", "cpp",
+        "fortran", "markdown", "msil", "html", "lua", "vhdl", "diff",
+        "haskell", "nemerle", "po", "perl", "java", "ini", "csharp",
+        "css", "changelog", "python", "gtkrc", "c", "vbnet", "verilog",
+        "javascript", "idl", "tcl", "R", "ada", "php", "pascal", "desktop",
+        "makefile", "scheme", "ruby", "xml", "sh"]
+
 tables = [
     """
     CREATE TABLE IF NOT EXISTS `snipplets` (
@@ -40,6 +47,7 @@ tables = [
     `description` varchar(255),
     `data` blob,
     `encryption` boolean DEFAULT 0,
+    `language` int(2) DEFAULT 0,
     `modified` date NOT NULL)
     """,
     
@@ -64,4 +72,9 @@ tables = [
     `image` varchar(255),
     `encrypt_default` boolean DEFAULT 0)
     """,
+    
+    """CREATE TABLE IF NOT EXISTS `languages` (
+    `language` varchar(30) NOT NULL,
+    `lastused` date NOT NULL)
+    """ 
     ]

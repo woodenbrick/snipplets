@@ -42,13 +42,20 @@ class DbSnipplet(object):
                            createtables.types)
         cursor.executemany("""INSERT INTO snipplets (typeid, description, data,
                            encryption, modified) VALUES (:type, :description,
-                           :data, :encryption, datetime('now', 'localtime'))""", createtables.test_data)
+                           :data, :encryption, datetime('now', 'localtime'))""",
+                           createtables.test_data)
+        for language in createtables.languages:
+            cursor.execute("""INSERT INTO languages (language, lastused) VALUES
+                               (?, datetime('now', 'localtime'))""", (language,))
         db.commit()
 
         return db, cursor
     
     
-    
+    def query(self, query):
+        """executes query and returns all"""
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
     
     def return_all(self, table):
         query = "SELECT * FROM %s" % table
@@ -70,21 +77,21 @@ class DbSnipplet(object):
         self.cursor.execute("""select snipplets.snippletid, types.image,
                             snipplets.description, snipplets.modified,
                             snipplets.encryption FROM snipplets INNER JOIN types ON
-                            snipplets.typeid=types.typeid""")
+                            snipplets.typeid=types.typeid ORDER BY snipplets.modified desc""")
         return self.cursor.fetchall()
     
     
     def return_snipplet_data(self, id):
         """Retrieves the data for snipplet with this id"""
-        self.cursor.execute("""select data, typeid, description, encryption
+        self.cursor.execute("""select data, typeid, description, encryption, language
                             from snipplets where snippletid=?""", (id,))
         return self.cursor.fetchone()
     
     
     def add_new(self, snipplet_obj):
         self.cursor.execute("""INSERT INTO snipplets (typeid, description,
-                            data, encryption, modified) VALUES (:type, :description, :data,
-                            :encryption, datetime('now', 'localtime'))""", snipplet_obj)
+                            data, encryption, language, modified) VALUES (:type, :description, :data,
+                            :encryption, :code_syntax, datetime('now', 'localtime'))""", snipplet_obj)
         self.db.commit()
     
     
@@ -99,7 +106,8 @@ class DbSnipplet(object):
     def edit(self, snipplet_obj):
         self.cursor.execute("""UPDATE snipplets set typeid=:type,
                             description=:description, data=:data,
-                            encryption=:encryption, modified=datetime('now', 'localtime')
+                            encryption=:encryption, language=:code_syntax,
+                            modified=datetime('now', 'localtime')
                             where snippletid=:snippletid""", snipplet_obj)
         self.db.commit()
         

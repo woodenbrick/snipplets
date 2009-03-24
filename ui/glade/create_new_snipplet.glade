@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Mar 24 11:01:43 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Mar 24 16:04:59 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -21,6 +21,15 @@
                 <property name="visible">True</property>
                 <signal name="changed" handler="on_type_changed"/>
               </widget>
+            </child>
+            <child>
+              <widget class="GtkComboBox" id="code_syntax">
+                <property name="visible">True</property>
+                <signal name="changed" handler="on_type_changed"/>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkHBox" id="hbox2">
@@ -45,29 +54,6 @@
                   <packing>
                     <property name="padding">20</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkHBox" id="hbox5">
-                <property name="visible">True</property>
-                <child>
-                  <widget class="GtkCheckButton" id="encryption">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Encrypted</property>
-                    <property name="xalign">1</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                  </widget>
-                  <packing>
-                    <property name="fill">False</property>
                   </packing>
                 </child>
               </widget>
@@ -160,6 +146,29 @@
               </packing>
             </child>
             <child>
+              <widget class="GtkHBox" id="hbox5">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkCheckButton" id="encryption">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Encrypted</property>
+                    <property name="xalign">1</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkHBox" id="hbox3">
                 <property name="visible">True</property>
                 <child>
@@ -189,7 +198,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="position">6</property>
+                <property name="position">7</property>
               </packing>
             </child>
             <child>
@@ -197,7 +206,7 @@
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="position">7</property>
+                <property name="position">8</property>
               </packing>
             </child>
           </widget>
