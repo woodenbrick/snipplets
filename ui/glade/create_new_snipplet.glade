@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Mar 23 14:25:02 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Mar 24 11:01:43 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -19,6 +19,7 @@
             <child>
               <widget class="GtkComboBox" id="type">
                 <property name="visible">True</property>
+                <signal name="changed" handler="on_type_changed"/>
               </widget>
             </child>
             <child>

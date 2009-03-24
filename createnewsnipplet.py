@@ -20,9 +20,8 @@
 import gtk
 import pygtk
 import gobject
+from gtkcodebuffer import CodeBuffer, SyntaxLoader
 pygtk.require("2.0")
-
-
 
 
 class CreateNewSnippletHandler():
@@ -35,7 +34,6 @@ class CreateNewSnippletHandler():
         self.types = self.db.return_all("types")
         self.fill_type_box(self.types)
         self.error_box = self.wTree.get_widget("error")
-        
         self.has_unsaved_changes = False
         self.id = id
         self.snipplet = NewSnipplet()
@@ -43,7 +41,22 @@ class CreateNewSnippletHandler():
         if self.id is not None:
             data = self.db.return_snipplet_data(self.id)
             self.snipplet.old_snipplet_reborn(data)
-    
+   
+    def on_type_changed(self, widget):
+        #checks if we are using code, if so we will use a code buffer
+        old_buff = self.wTree.get_widget("data").get_buffer()
+        start, end = old_buff.get_bounds()
+        text = old_buff.get_text(start, end)
+        if self.wTree.get_widget("type").get_active() == 0:    
+            #we need some way to check the language either user defined
+            #or automatic check
+            lang = SyntaxLoader("php")
+            buff = CodeBuffer(lang=lang)
+        else:
+            buff = gtk.TextBuffer()
+        self.wTree.get_widget("data").set_buffer(buff)
+        buff.set_text(text)
+        
     def fill_type_box(self, types):
         liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf)
         for type in types:

@@ -21,7 +21,6 @@ import gtk
 import pygtk
 pygtk.require("2.0")
 
-import sniptypes
 
 class MainSnippletHandler():
     
@@ -35,8 +34,8 @@ class MainSnippletHandler():
         self.selection_view = self.wTree.get_widget("selection")
         self.data_view = self.wTree.get_widget("data")
         
-        self.types = sniptypes.Types(self.db.return_all("types"))
-        self.tags = sniptypes.Tags(self.db.return_all("tags"))
+        #self.types = sniptypes.Types(self.db.return_all("types"))
+        #self.tags = sniptypes.Tags(self.db.return_all("tags"))
         self.create_selection_area()
         self.create_view_area()
         
