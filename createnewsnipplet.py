@@ -54,7 +54,7 @@ class CreateNewSnippletHandler():
         if self.wTree.get_widget("type").get_active() == 0:    
             self.wTree.get_widget("code_syntax").show()
             active_code = self.wTree.get_widget("code_syntax").get_active()
-            buff = self.code_syntax.get_syntax(active_code)
+            buff = self.code_syntax.set_buffer_language(active_code)
         else:
             self.wTree.get_widget("code_syntax").hide()
             buff = gtk.TextBuffer()

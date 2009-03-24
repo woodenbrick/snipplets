@@ -1,4 +1,4 @@
-# codecompletion.py
+# syntaxhighlight.py
 #
 # Copyright 2009 Daniel Woodhouse
 #
@@ -20,7 +20,7 @@
 from gtkcodebuffer import CodeBuffer, SyntaxLoader
 import dbsnipplet
 
-class CodeCompletion(object):
+class HighLighter(object):
     def __init__(self, db):
         self.db = db
         self.filetypes = []
@@ -30,7 +30,7 @@ class CodeCompletion(object):
             self.filetypes.append(l[0])
 
 
-    def get_syntax(self, syntax_chosen):
+    def set_buffer_language(self, syntax_chosen):
         """Returns a buffer set to the correct language"""
         if syntax_chosen < 0:
             syntax_chosen = 2

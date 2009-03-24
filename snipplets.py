@@ -26,7 +26,7 @@ import gtk.glade
 from mainsnipplet import MainSnippletHandler
 from createnewsnipplet import CreateNewSnippletHandler
 import dbsnipplet
-import codecompletion
+import syntaxhighlight
 
 class RunSnipplets(object):
 
@@ -40,7 +40,7 @@ class RunSnipplets(object):
         
         self.db = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
         #define codecompletion object here for use by all children
-        self.code_syntax = codecompletion.CodeCompletion(self.db)
+        self.code_syntax = syntaxhighlight.HighLighter(self.db)
         
         self.create_main_window()        
 

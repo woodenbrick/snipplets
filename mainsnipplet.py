@@ -116,7 +116,7 @@ class MainSnippletHandler():
         data = self.db.return_snipplet_data(snipid)
         #check if we have a code snipplet
         if data[1] == 1:
-            self.data_view.set_buffer(self.code_syntax.get_syntax(data[4]))
+            self.data_view.set_buffer(self.code_syntax.set_buffer_language(data[4]))
         self.data_view.get_buffer().set_text(data[0])
         
     def on_selection_row_activated(self, widget, path, column):

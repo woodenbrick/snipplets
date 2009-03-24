@@ -91,7 +91,8 @@ class DbSnipplet(object):
     def add_new(self, snipplet_obj):
         self.cursor.execute("""INSERT INTO snipplets (typeid, description,
                             data, encryption, language, modified) VALUES (:type, :description, :data,
-                            :encryption, :code_syntax, datetime('now', 'localtime'))""", snipplet_obj)
+                            :encryption, :code_syntax, datetime('now', 'localtime'))""",
+                            snipplet_obj)
         self.db.commit()
     
     
