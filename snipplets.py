@@ -41,8 +41,18 @@ class RunSnipplets(object):
         self.db = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
         #define codecompletion object here for use by all children
         self.code_syntax = syntaxhighlight.HighLighter(self.db)
+        self.create_main_window()
+        #add tray icon
+        self.tray_icon = gtk.StatusIcon()
+        self.tray_icon.set_from_file("ui/images/user_male.png")
+        self.tray_icon.connect("activate", self.activate_menu, None)
+        self.tray_icon.connect("popup-menu", self.popup_menu, None)
+
+    def activate_menu(self, *args):
+        print args
         
-        self.create_main_window()        
+    def popup_menu(self, *args):
+        print args
 
     
     def create_main_window(self):
