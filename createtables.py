@@ -17,11 +17,15 @@
 #You should have received a copy of the GNU General Public License
 #along with snipplets.  If not, see http://www.gnu.org/licenses/
 import time
+
+#these are the default types for a setup of snipplets
 types = [
     {"type" : "Code", "image" : "ui/images/binary.png", "encrypt_default" : 0},
+    {"type" : "Command/Shortcut", "image" : "ui/images/terminal.png",
+     "encrypt_default" : 0},
     {"type" : "Chat log", "image" : "ui/images/kdmconfig.png", "encrypt_default" : 0},
     {"type" : "Password/Key", "image" : "ui/images/password.png", "encrypt_default" : 1},
-    {"type" : "Personal", "image" : "ui/images/user_male.png", "encrypt_default" : 1},
+    {"type" : "Personal", "image" : "ui/images/user_male.png", "encrypt_default" : 1}
     ]
 
 test_data = [
