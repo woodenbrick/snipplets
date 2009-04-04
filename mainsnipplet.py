@@ -30,6 +30,7 @@ class MainSnippletHandler():
         self.parent = parent
         self.db = self.parent.db
         self.code_syntax = self.parent.code_syntax
+        self.window = self.wTree.get_widget("window")
         self.type_view = self.wTree.get_widget("types")
         self.tag_view = self.wTree.get_widget("tags")
         self.selection_view = self.wTree.get_widget("selection")
@@ -48,7 +49,7 @@ class MainSnippletHandler():
 
   
     def on_create_snipplet_clicked(self, widget):
-        self.parent.create_new_snipplet_window()
+        self.parent.create_new_snipplet_window(widget)
         
     
     
@@ -125,7 +126,7 @@ class MainSnippletHandler():
         snipid = model.get_value(iter, 0)
         #save iterator for later use
         self.edit_iter = iter
-        self.parent.create_new_snipplet_window(snipid)
+        self.parent.create_new_snipplet_window(widget, snipid)
             
     
         

@@ -38,5 +38,3 @@ class HighLighter(object):
         buffer = CodeBuffer(lang=lang)
         return buffer
 
-                 
-
