@@ -8,3 +8,5 @@ A dropdown menu to store snippets of data such as:
 * anything the user wants to define
 
 Items will be taggable and encyptable.
+
+This is a very basic release 0.1 with many missing features, however the base creation and editing works correctly.

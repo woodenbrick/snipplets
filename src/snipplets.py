@@ -46,7 +46,7 @@ class RunSnipplets(object):
         self.create_main_window()
         
         self.tray_icon = gtk.StatusIcon()
-        self.tray_icon.set_from_file(self.IMAGES_DIR + "user_male.png")
+        self.tray_icon.set_from_file(self.IMAGES_DIR + "snipplets.png")
         self.tray_icon.connect("activate", self.activate_menu, None)
         self.tray_icon.connect("popup-menu", self.popup_menu, None)
         

@@ -102,7 +102,7 @@ class MainHandler():
     def update_selection_view(self, dict, id=None):
         """called when the user creates a new snipplet"""
         row = self.db.return_most_recent_snipplet()
-        row1 = gtk.gdk.pixbuf_new_from_file(row[1])
+        row1 = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1])
         #if we have an id, it means it was an edited so dont add again just update
         if id:
             self.selection_liststore.remove(self.edit_iter)
