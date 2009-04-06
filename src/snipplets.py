@@ -23,28 +23,30 @@ import pygtk
 pygtk.require("2.0")
 import gtk.glade
 
-from mainsnipplet import MainSnippletHandler
-from createnewsnipplet import CreateNewSnippletHandler
-import dbsnipplet
-import syntaxhighlight
+from main import MainHandler
+from createnew import CreateNewHandler
+import db
+import highlight
 
 class RunSnipplets(object):
 
-    def __init__(self):
-        self.GLADE_DIR = "ui/glade/"
+    def __init__(self, author, version, error_log):
+        DIR = os.path.dirname(__file__)
+        self.GLADE_DIR = os.path.join(DIR, "ui", "glade") + os.sep
+        self.IMAGES_DIR = os.path.join(DIR, "ui", "images") + os.sep
         self.HOME_DIR = os.path.join(os.environ['HOME'], ".snipplets" + os.sep)
         try:
             os.mkdir(self.HOME_DIR)
         except:
             pass
         
-        self.db = dbsnipplet.DbSnipplet(self.HOME_DIR + "snippletsDB")
+        self.db = db.DbSnipplet(self.HOME_DIR + "snippletsDB")
         #define codecompletion object here for use by all children
-        self.code_syntax = syntaxhighlight.HighLighter(self.db)
+        self.code_syntax = highlight.HighLighter(self.db)
         self.create_main_window()
         
         self.tray_icon = gtk.StatusIcon()
-        self.tray_icon.set_from_file("ui/images/user_male.png")
+        self.tray_icon.set_from_file(self.IMAGES_DIR + "user_male.png")
         self.tray_icon.connect("activate", self.activate_menu, None)
         self.tray_icon.connect("popup-menu", self.popup_menu, None)
         
@@ -68,7 +70,7 @@ class RunSnipplets(object):
         self.main_window.window.present()
     
     def create_main_window(self):
-        self.main_window = MainSnippletHandler(self, "snipplets.glade")
+        self.main_window = MainHandler(self, "snipplets.glade")
 
     def gtk_main_quit(self, widget=None):
         gtk.main_quit()
@@ -78,7 +80,7 @@ class RunSnipplets(object):
         
 
     def create_new_snipplet_window(self, widget=None, id=None):
-        self.create_new_window = CreateNewSnippletHandler(self, "create_new_snipplet.glade", id=id)
+        self.create_new_window = CreateNewHandler(self, "create_new_snipplet.glade", id=id)
 
     
 

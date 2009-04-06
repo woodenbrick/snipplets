@@ -21,9 +21,8 @@ import gtk
 import pygtk
 import gobject
 pygtk.require("2.0")
-import codecompletion
 
-class CreateNewSnippletHandler():
+class CreateNewHandler():
 
     def __init__(self, parent, glade_file, id=None):
         self.wTree = gtk.glade.XML(parent.GLADE_DIR + glade_file)
@@ -64,7 +63,8 @@ class CreateNewSnippletHandler():
     def fill_type_box(self, types):
         liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf)
         for type in types:
-            liststore.append([type[1], gtk.gdk.pixbuf_new_from_file(type[2])])
+            liststore.append([type[1], gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR +
+                                                                    type[2])])
          
         combobox = self.wTree.get_widget("type")
         combobox.set_model(liststore)

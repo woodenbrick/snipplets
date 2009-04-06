@@ -22,7 +22,7 @@ import pygtk
 pygtk.require("2.0")
 
 
-class MainSnippletHandler():
+class MainHandler():
     
     def __init__(self, parent, glade_file):
         self.wTree = gtk.glade.XML(parent.GLADE_DIR + glade_file)
@@ -62,7 +62,7 @@ class MainSnippletHandler():
         for row in snipplets:
             #liststore: int, gtk.gdk.Pixbuf, str, int, str
             #rows: id, typeimage, description, encryption, modified
-            row1 = gtk.gdk.pixbuf_new_from_file(row[1])
+            row1 = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1])
             self.selection_liststore.append([row[0], row1, row[2], row[3], row[4]])
         
         #append to columns

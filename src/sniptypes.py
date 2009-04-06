@@ -1,4 +1,4 @@
-# syntaxhighlight.py
+# types.py
 #
 # Copyright 2009 Daniel Woodhouse
 #
@@ -17,24 +17,28 @@
 #You should have received a copy of the GNU General Public License
 #along with snipplets.  If not, see http://www.gnu.org/licenses/
 
-from gtkcodebuffer import CodeBuffer, SyntaxLoader
-import dbsnipplet
+class Types(object):
+    
+    def __init__(self, type_data):
+        self.types = []
+        #type_data layout = (1, u'Code', u'ui/images/binary.png', 0)
+        for row in type_data:
+            self.types.append(row)
+            
 
-class HighLighter(object):
-    def __init__(self, db):
-        self.db = db
-        self.filetypes = []
-        lang = self.db.query("""SELECT language from languages ORDER BY
-                                       lastused DESC""")
-        for l in lang:
-            self.filetypes.append(l[0])
-
-
-    def set_buffer_language(self, syntax_chosen):
-        """Returns a buffer set to the correct language"""
-        if syntax_chosen < 0:
-            syntax_chosen = 2
-        lang = SyntaxLoader(self.filetypes[syntax_chosen])
-        buffer = CodeBuffer(lang=lang)
-        return buffer
-
+    
+    def return_image_from_id(self, id):
+        for row in self.types:
+            if row[0] == id:
+                return row[2]
+        return False
+    
+    def return_image_from_name(self, name):
+        pass
+    
+    
+    
+class Tags(object):
+    
+    def __init__(self, tag_data):
+        pass
