@@ -40,7 +40,7 @@ class RunSnipplets(object):
         except:
             pass
         
-        self.db = db.DbSnipplet(self.HOME_DIR + "snippletsDB")
+        self.db = db.DbSnipplet(self.HOME_DIR + "DEVsnippletsDB")
         #define codecompletion object here for use by all children
         self.code_syntax = highlight.HighLighter(self.db)
         self.create_main_window()

@@ -1,3 +1,4 @@
 .snipplets.kpf
 *~
 *.pyc
+build/
