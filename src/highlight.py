@@ -17,8 +17,11 @@
 #You should have received a copy of the GNU General Public License
 #along with snipplets.  If not, see http://www.gnu.org/licenses/
 
-from gtkcodebuffer import CodeBuffer, SyntaxLoader
-import db
+try:
+    from gtkcodebuffer import CodeBuffer, SyntaxLoader
+    highlighting = True
+except ImportError:
+    highlighting = False
 
 class HighLighter(object):
     def __init__(self, db):
@@ -32,6 +35,8 @@ class HighLighter(object):
 
     def set_buffer_language(self, syntax_chosen):
         """Returns a buffer set to the correct language"""
+        if not highlighting:
+            return gtk.TextBuffer()
         if syntax_chosen < 0:
             syntax_chosen = 2
         lang = SyntaxLoader(self.filetypes[syntax_chosen])
