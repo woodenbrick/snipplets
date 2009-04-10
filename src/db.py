@@ -97,9 +97,8 @@ class DbSnipplet(object):
     
     
     
-    def delete(self, snipplet_obj):
-        self.cursor.execute("""DELETE FROM snipplets WHERE snippletid=:snippletid""",
-                             snipplet_obj)
+    def delete(self, id):
+        self.cursor.execute("""DELETE FROM snipplets WHERE snippletid=?""", (id,))
         self.db.commit()
     
     

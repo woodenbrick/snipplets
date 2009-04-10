@@ -29,6 +29,7 @@ class MainHandler():
         self.wTree.signal_autoconnect(self)
         self.parent = parent
         self.db = self.parent.db
+        self.clipboard = self.parent.clipboard
         self.code_syntax = self.parent.code_syntax
         self.window = self.wTree.get_widget("window")
         self.type_view = self.wTree.get_widget("types")
@@ -120,16 +121,47 @@ class MainHandler():
             self.data_view.set_buffer(self.code_syntax.set_buffer_language(data[4]))
         self.data_view.get_buffer().set_text(data[0])
         
-    def on_selection_row_activated(self, widget, path, column):
+    def on_selection_row_activated(self, widget, path=None, column=None):
         """User double clicks, show the current snipplet in an edit box"""
         model, iter = self.selection_view.get_selection().get_selected()
         snipid = model.get_value(iter, 0)
         #save iterator for later use
         self.edit_iter = iter
         self.parent.create_new_snipplet_window(widget, snipid)
-            
-    
+  
+
+    def on_delete_clicked(self, widget):
+        popup = gtk.MessageDialog(None, gtk.DIALOG_MODAL,
+                                  gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+                                  "Are you sure you want to delete this snipplet?")
+        response = popup.run()
+        if response == gtk.RESPONSE_YES:
+            model, iter = self.selection_view.get_selection().get_selected()
+            snipid = model.get_value(iter, 0)
+            self.db.delete(snipid)
+            model.remove(iter)
+            self.update_status("Snipplet deleted")
+        popup.destroy()
+
+    def on_copy_clicked(self, widget):
+        """If the user has some text selected we will copy this,
+        else we will grab the whole snipplet"""
+        buffer = self.wTree.get_widget("data").get_buffer()
+        try:
+            start, end = buffer.get_selection_bounds()
+        except ValueError:
+            start, end = buffer.get_bounds()
+        self.clipboard.set_text(buffer.get_text(start, end))
         
+    
+    def update_status(self, text):
+        pass
+        #self.wTree.get_widget("status_bar").set_text(text)
+        #gobject.timeout_add(1000, self.clear_status)
+        
+    def clear_status(self):
+        self.wTree.get_widget("status_bar").set_text("")
+   
     def show_snipplets(self):
         """fetches and calculates all types,tags and snipplets info and creates
         snipplet objects"""

@@ -94,7 +94,7 @@ class CreateNewHandler():
     
     def on_window_destroy(self, widget):
         self.wTree.get_widget("window").destroy()
-        return True
+        return False
   
     
     def on_save_new_clicked(self, widget):

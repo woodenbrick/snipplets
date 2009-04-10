@@ -40,6 +40,7 @@ class RunSnipplets(object):
         except:
             pass
         
+        self.clipboard = gtk.Clipboard()
         self.db = db.DbSnipplet(self.HOME_DIR + "DEVsnippletsDB")
         #define codecompletion object here for use by all children
         self.code_syntax = highlight.HighLighter(self.db)
@@ -53,6 +54,7 @@ class RunSnipplets(object):
         self.wTree_menu = gtk.glade.XML(self.GLADE_DIR + "notification_menu")
         self.wTree_menu.signal_autoconnect(self)
         self.right_click_menu = self.wTree_menu.get_widget("status_menu")
+        
 
     def activate_menu(self, *args):
         if self.main_window.window.props.visible:

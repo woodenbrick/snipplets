@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Mar 27 15:40:29 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Apr  8 16:03:55 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_window_destroy"/>
     <child>
       <widget class="GtkFrame" id="">
