@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Type=Application
+Name=Snipplets
+Comment=Save small snipplets of data in a taggable db
+Exec=/usr/bin/snipplets -e
+Terminal=false
+Categories=Office;
+StartupNotify=false
+Icon=/usr/share/snipplets/ui/images/snipplets.png

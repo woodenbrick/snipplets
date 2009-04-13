@@ -22,6 +22,7 @@ import gtk
 import pygtk
 pygtk.require("2.0")
 import gtk.glade
+import gobject
 
 from main import MainHandler
 from createnew import CreateNewHandler
@@ -83,8 +84,6 @@ class RunSnipplets(object):
 
     def create_new_snipplet_window(self, widget=None, id=None):
         self.create_new_window = CreateNewHandler(self, "create_new_snipplet.glade", id=id)
-
-    
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-# syntaxhighlight.py
+# highlight.py
 #
 # Copyright 2009 Daniel Woodhouse
 #

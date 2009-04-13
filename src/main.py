@@ -20,6 +20,8 @@
 import gtk
 import pygtk
 pygtk.require("2.0")
+import time
+from misc import nicetime
 
 
 class MainHandler():
@@ -63,8 +65,9 @@ class MainHandler():
         for row in snipplets:
             #liststore: int, gtk.gdk.Pixbuf, str, int, str
             #rows: id, typeimage, description, encryption, modified
+            row3 = nicetime(row[3])
             row1 = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1])
-            self.selection_liststore.append([row[0], row1, row[2], row[3], row[4]])
+            self.selection_liststore.append([row[0], row1, row[2], row3, row[4]])
         
         #append to columns
         i = 0
@@ -107,7 +110,8 @@ class MainHandler():
         #if we have an id, it means it was an edited so dont add again just update
         if id:
             self.selection_liststore.remove(self.edit_iter)
-        self.selection_liststore.prepend([row[0], row1, row[2], row[3], row[4]])
+        row3 = nicetime(row[3])
+        self.selection_liststore.prepend([row[0], row1, row[2], row3, row[4]])
 
     
     def on_selection_cursor_changed(self, widget):
@@ -152,6 +156,7 @@ class MainHandler():
         except ValueError:
             start, end = buffer.get_bounds()
         self.clipboard.set_text(buffer.get_text(start, end))
+        self.update_stats("Snipplet copied to clipboard")
         
     
     def update_status(self, text):
