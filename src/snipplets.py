@@ -35,7 +35,12 @@ class RunSnipplets(object):
         DIR = os.path.dirname(__file__)
         self.GLADE_DIR = os.path.join(DIR, "ui", "glade") + os.sep
         self.IMAGES_DIR = os.path.join(DIR, "ui", "images") + os.sep
-        self.HOME_DIR = os.path.join(os.environ['HOME'], ".snipplets" + os.sep)
+        try:
+            self.HOME_DIR = os.path.join(os.environ['HOME'], ".snipplets" + os.sep)
+        except KeyError:
+            #windows
+            self.HOME_DIR = os.path.join(os.environ['HOMEPATH'], ".snipplets" +
+                                         os.sep)
         try:
             os.mkdir(self.HOME_DIR)
         except:
