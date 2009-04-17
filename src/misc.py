@@ -19,7 +19,7 @@
 
 import time
 
-def nicetime(past_time, fuzzy=False, length=3):
+def nicetime(past_time, fuzzy=True, length=2):
     """Takes time in the form of 2009-12-04 14:55:02 and
     returns a nicely formatted string 2 hours ago...etc.
     fuzzy will leave todays times as Today <time>"""

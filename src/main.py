@@ -19,6 +19,7 @@
 
 import gtk
 import pygtk
+import gobject
 pygtk.require("2.0")
 import time
 from misc import nicetime
@@ -38,6 +39,18 @@ class MainHandler():
         self.tag_view = self.wTree.get_widget("tags")
         self.selection_view = self.wTree.get_widget("selection")
         self.data_view = self.wTree.get_widget("data")
+        
+        #combobox for saving filetypes
+        liststore = gtk.ListStore(gobject.TYPE_STRING)
+        for item in ["xml", "text"]:
+            liststore.append(["XML Files"])
+            liststore.append(["All Files"])
+        combobox = self.wTree.get_widget("filetypes")
+        combobox.set_model(liststore)
+        text = gtk.CellRendererText()
+        combobox.pack_start(text)
+        combobox.add_attribute(text, "text", 0)
+        combobox.set_active(0)
         
         #self.types = sniptypes.Types(self.db.return_all("types"))
         #self.tags = sniptypes.Tags(self.db.return_all("tags"))
@@ -157,6 +170,14 @@ class MainHandler():
             start, end = buffer.get_bounds()
         self.clipboard.set_text(buffer.get_text(start, end))
         self.update_stats("Snipplet copied to clipboard")
+        
+    def on_export_clicked(self, widget):
+        """Show a dialog to the user asking where and what type of export"""
+        self.wTree.get_widget("filechooser").run()
+        self.wTree.get_widget("filechooser").hide()
+            
+    def on_file_saver_event(self, widget):
+        print 'save'
         
     
     def update_status(self, text):
