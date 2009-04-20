@@ -22,6 +22,7 @@ import pygtk
 import gobject
 pygtk.require("2.0")
 import time
+from xml.etree import ElementTree as ET
 from misc import nicetime
 
 
@@ -106,6 +107,10 @@ class MainHandler():
             if i == 0:
                 col.set_visible(False)
             i +=1
+        #show the last edited snipplet by default
+        self.selection_view.get_selection().select_path(0)
+        self.on_selection_cursor_changed(None)
+        
         
     #def create_view_area(self):
     #    self.snipplet_data_liststore = gtk.ListStore(str)
@@ -172,12 +177,74 @@ class MainHandler():
         self.update_stats("Snipplet copied to clipboard")
         
     def on_export_clicked(self, widget):
-        """Show a dialog to the user asking where and what type of export"""
-        self.wTree.get_widget("filechooser").run()
-        self.wTree.get_widget("filechooser").hide()
-            
+        """Save snipplet dialog"""
+        self.file_selection = gtk.FileChooserDialog(title="Save snipplet", parent=None, 
+                                                    action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                                                    buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+                                                             gtk.STOCK_SAVE,gtk.RESPONSE_OK),
+                                                    backend=None)
+        self.file_selection.set_current_name(self.get_possible_filename())
+        filter = gtk.FileFilter()
+        filter.set_name("Snipplet (.snip)")
+        filter.add_pattern("*.snip")
+        self.file_selection.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name("All Files")
+        filter.add_pattern("*")
+        self.file_selection.add_filter(filter)
+        
+        response = self.file_selection.run()
+        if response == gtk.RESPONSE_OK:
+            #create an xml document
+            model, iter = self.selection_view.get_selection().get_selected()
+            snipid = model.get_value(iter, 0)
+            rows = self.db.return_snipplet_data(snipid)
+            root = ET.Element("snipplets")
+            el_snipplet = ET.SubElement(root, "snipplet")
+            type = ET.SubElement(el_snipplet, "typeid")
+            type.text = str(rows[1])
+            des = ET.SubElement(el_snipplet, "description")
+            des.text = rows[2]
+            data = ET.SubElement(el_snipplet, "data")
+            data.text = rows[0]
+            enc = ET.SubElement(el_snipplet, "encryption")
+            enc.text = str(rows[3])
+            lang = ET.SubElement(el_snipplet, "language")
+            lang.text = str(rows[4])
+            mod = ET.SubElement(el_snipplet, "modified")
+            mod.text = str(rows[5])
+            tags = ET.SubElement(el_snipplet, "tags")
+            t = ['testtag1', 'testtag2']
+            for tag in t:
+                cur = ET.SubElement(tags, "tag")
+                cur.text = tag
+            print self.file_selection.get_filename()
+            tree = ET.ElementTree(root)
+            tree.write(self.file_selection.get_filename())
+        self.file_selection.destroy()
+        
+    def get_possible_filename(self):
+        """Default name for exported snipplet"""
+        model, iter = self.selection_view.get_selection().get_selected()
+        desc = model.get_value(iter, 2)
+        desc = ("".join(desc.split(" ")) + ".snip").lower()
+        return desc
+
+    def file_sel_save(self, widget):
+        print widget
+        
+    def file_sel_destroy(self, widget):
+        self.file_selection.destroy()
+        
+        
+        #filechooser = self.wTree.get_widget("filechooser")
+        #filechooser.set_current_name(self.get_possible_filename())
+        #filechooser.run()
+        #filechooser.hide()
+        #    
     def on_file_saver_event(self, widget):
-        print 'save'
+        pass
+        #filename = self.wTree.get_widget("
         
     
     def update_status(self, text):
@@ -187,6 +254,8 @@ class MainHandler():
         
     def clear_status(self):
         self.wTree.get_widget("status_bar").set_text("")
+   
+
    
     def show_snipplets(self):
         """fetches and calculates all types,tags and snipplets info and creates

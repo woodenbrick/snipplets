@@ -83,9 +83,12 @@ class DbSnipplet(object):
     
     def return_snipplet_data(self, id):
         """Retrieves the data for snipplet with this id"""
-        self.cursor.execute("""select data, typeid, description, encryption, language
+        self.cursor.execute("""select data, typeid, description, encryption, language, modified
                             from snipplets where snippletid=?""", (id,))
+        
         return self.cursor.fetchone()
+    
+
     
     
     def add_new(self, snipplet_obj):

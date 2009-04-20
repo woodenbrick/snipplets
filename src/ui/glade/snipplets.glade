@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Apr 17 15:41:55 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Apr 20 17:57:56 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -387,15 +387,19 @@
     <property name="width_request">400</property>
     <property name="height_request">400</property>
     <property name="border_width">5</property>
+    <property name="modal">True</property>
     <property name="window_position">GTK_WIN_POS_CENTER_ALWAYS</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
+    <property name="action">GTK_FILE_CHOOSER_ACTION_SAVE</property>
+    <property name="do_overwrite_confirmation">True</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
           <widget class="GtkComboBox" id="filetypes">
+            <property name="width_request">200</property>
             <property name="visible">True</property>
             <signal name="changed" handler="on_filetypes_changed"/>
           </widget>
@@ -427,7 +431,7 @@
                 <property name="label" translatable="yes">gtk-save</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_filesaver_event"/>
+                <signal name="clicked" handler="on_file_saver_event"/>
               </widget>
               <packing>
                 <property name="position">1</property>
