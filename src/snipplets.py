@@ -47,7 +47,7 @@ class RunSnipplets(object):
             pass
         
         self.clipboard = gtk.Clipboard()
-        self.db = db.DbSnipplet(self.HOME_DIR + "DEVsnippletsDB")
+        self.db = db.DbSnipplet(self.HOME_DIR + "TUCK")#"DEVsnippletsDB")
         #define codecompletion object here for use by all children
         self.code_syntax = highlight.HighLighter(self.db)
         self.create_main_window()

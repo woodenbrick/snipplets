@@ -37,8 +37,8 @@ class DbSnipplet(object):
         import createtables
         for query in createtables.tables:
             cursor.execute(query)
-        cursor.executemany("""INSERT INTO types (type, image, encrypt_default)
-                           VALUES (:type, :image, :encrypt_default)""",
+        cursor.executemany("""INSERT INTO types (type, encrypt_default)
+                           VALUES (:type, :encrypt_default)""",
                            createtables.types)
         cursor.executemany("""INSERT INTO snipplets (typeid, description, data,
                            encryption, modified) VALUES (:type, :description,
@@ -64,7 +64,7 @@ class DbSnipplet(object):
     
     
     def return_most_recent_snipplet(self):
-        self.cursor.execute("""select snipplets.snippletid, types.image,
+        self.cursor.execute("""select snipplets.snippletid, types.type,
                             snipplets.description, snipplets.modified,
                             snipplets.encryption FROM snipplets INNER JOIN types ON
                             snipplets.typeid=types.typeid ORDER BY snipplets.modified
@@ -74,7 +74,7 @@ class DbSnipplet(object):
     
     def return_snipplet_selection(self):
         """Retrieves snipplet info without data"""
-        self.cursor.execute("""select snipplets.snippletid, types.image,
+        self.cursor.execute("""select snipplets.snippletid, types.type,
                             snipplets.description, snipplets.modified,
                             snipplets.encryption FROM snipplets INNER JOIN types ON
                             snipplets.typeid=types.typeid ORDER BY snipplets.modified desc""")

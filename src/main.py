@@ -53,10 +53,8 @@ class MainHandler():
         combobox.add_attribute(text, "text", 0)
         combobox.set_active(0)
         
-        #self.types = sniptypes.Types(self.db.return_all("types"))
-        #self.tags = sniptypes.Tags(self.db.return_all("tags"))
         self.create_selection_area()
-        #self.create_view_area()
+        self.fill_types()
         
 
     
@@ -71,18 +69,18 @@ class MainHandler():
     
     
     def create_selection_area(self):
-        self.selection_columns = ["id", "", "Description", "Modified", "Encryption"]
-        self.selection_liststore = gtk.ListStore(int, gtk.gdk.Pixbuf, str, str, int)
+        self.selection_columns = ["id", "", "Description", "Modified", "Encryption", "Type"]
+        self.selection_liststore = gtk.ListStore(int, gtk.gdk.Pixbuf, str, str, int, str)
         self.selection_view.set_model(self.selection_liststore)
-        
+        self.selection_filter = self.selection_liststore.filter_new()
         snipplets = self.db.return_snipplet_selection()
         for row in snipplets:
-            #liststore: int, gtk.gdk.Pixbuf, str, int, str
-            #rows: id, typeimage, description, encryption, modified
+            #liststore: int, gtk.gdk.Pixbuf, str, int, str, bool
+            #rows: id, typeimage, description, encryption, modified, visible
             row3 = nicetime(row[3])
-            row1 = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1])
-            self.selection_liststore.append([row[0], row1, row[2], row3, row[4]])
-        
+            image = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1].lower() + ".png")
+            self.selection_liststore.append([row[0], image, row[2], row3, row[4], row[1]])
+                
         #append to columns
         i = 0
         for column in self.selection_columns:
@@ -108,19 +106,61 @@ class MainHandler():
                 col.set_visible(False)
             i +=1
         #show the last edited snipplet by default
+        self.selection_filter.set_visible_func(self.check_selection_visibility)
         self.selection_view.get_selection().select_path(0)
         self.on_selection_cursor_changed(None)
         
         
-    #def create_view_area(self):
-    #    self.snipplet_data_liststore = gtk.ListStore(str)
-    #    self.data_view.set_model(self.snipplet_data_liststore)
-    #    column = gtk.TreeViewColumn()
-    #    cell = gtk.CellRendererText()
-    #    column.pack_start(cell, False)
-    #    column.set_attributes(cell, text=0)
-    #    self.data_view.append_column(column)
+    def fill_types(self):
+        types = self.db.query("""SELECT * FROM types""")
+        self.types = []
+        liststore = gtk.ListStore(int, gtk.gdk.Pixbuf, str)
+        #by default we should show all
+        liststore.append([0, gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + "all.png"),
+                         "All"])
+        for type in types:
+            image = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + type[1].lower() + ".png")
+            liststore.append([type[0], image, type[1]])
+            self.types.append(type[1])
+        self.show_types = self.types
+        self.type_view.set_model(liststore)
+        columns = ["id", "pic", "type"]
+        for i in range(0, len(columns)):
+            col = gtk.TreeViewColumn(columns[i])
+            if columns[i] == "pic":
+                cell = gtk.CellRendererPixbuf()
+            else:
+                cell = gtk.CellRendererText()
+            col.pack_start(cell, False)
+            if columns[i] == "pic":
+                col.set_attributes(cell, pixbuf=i)
+            else:
+                col.set_attributes(cell, text=i)
+            #if columns[i] == "id":
+            #    col.set_visible(False)
+            self.type_view.append_column(col)
+        self.type_view.get_selection().select_path(0)
+            
+    def on_types_cursor_changed(self, *args):
+        """Show only the types that are selected"""
+        model, iter = self.type_view.get_selection().get_selected()
+        type = model.get_value(iter, 2)
+        if type == "All":
+            self.show_types = self.types
+        else:
+            self.show_types = [type]
+        print "-" * 10
+        print self.show_types
+        self.selection_filter.refilter()
+        #we should also make sure that a valid selection is shown
+        #or blank if the user has emptied all possibilites
+        return
     
+    def check_selection_visibility(self, model, iter):
+        print model.get_value(iter, 5) in self.show_types, model.get_value(iter, 2)    
+        return model.get_value(iter, 5) in self.show_types
+
+
     def update_selection_view(self, dict, id=None):
         """called when the user creates a new snipplet"""
         row = self.db.return_most_recent_snipplet()

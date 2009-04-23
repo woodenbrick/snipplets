@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Apr 20 17:57:56 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Apr 23 15:27:56 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
-    <property name="visible">True</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_window_destroy"/>
     <child>
@@ -156,6 +155,7 @@
                   <widget class="GtkTreeView" id="types">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <signal name="cursor_changed" handler="on_types_cursor_changed"/>
                   </widget>
                   <packing>
                     <property name="position">3</property>

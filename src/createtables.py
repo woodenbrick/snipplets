@@ -20,20 +20,35 @@ import time
 
 #these are the default types for a setup of snipplets
 types = [
-    {"type" : "Code", "image" : "binary.png", "encrypt_default" : 0},
-    {"type" : "Command/Shortcut", "image" : "terminal.png",
-     "encrypt_default" : 0},
-    {"type" : "Chat log", "image" : "kdmconfig.png", "encrypt_default" : 0},
-    {"type" : "Password/Key", "image" : "password.png", "encrypt_default" : 1},
-    {"type" : "Personal", "image" : "user_male.png", "encrypt_default" : 1}
+    {"type" : "Code", "encrypt_default" : 0},
+    {"type" : "Command", "encrypt_default" : 0},
+    {"type" : "Key", "encrypt_default" : 1},
+    {"type" : "Personal", "encrypt_default" : 1}
     ]
 
 test_data = [
-    {"description" : "Mommas fried chicken", "data" : "2 eggs, 1 chicken",
+    {"description" : "Welcome to Snipplets!", "data" : """Snipplets is an easy way to keep
+     your little snippets of data in order.""",
      "encryption" : 0, "type" : 2},
-    {"description" : "Python code", "data" : "def Test():",
-     "encryption" : 0, "type" : 1},
-    {"description" : "GPG Key", "data" : "123123iojasdoij231",
+    {"description" : "Sample python code", "data" : """
+     def Test():
+         if x == 1:
+             print x
+            """,
+     "encryption" : 0, "type" : 1, "language" : 21 },
+    {"description" : "Snipplets PPA Public Key", "data" : """
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: SKS 1.0.10
+
+mI0ESdosRwEEAPpNSzctKOn1Abu68iItXRtGCoFAU76Un1tS3eR7VePwXymrz94u9pGdxJ7z
+1tBJcbYmXj4mbUUTIy21Itk9xdGwkZMqLgq7ejFdt1FLIHN9uVZmpx1V301ycC7I2qh7w0XI
+3v7eQ8ovWJQ6M+EBt1qbXI9VpNANo+SbVizxWCmFABEBAAG0G0xhdW5jaHBhZCBQUEEgZm9y
+IFNuaXBwbGV0c4i2BBMBAgAgBQJJ2ixHAhsDBgsJCAcDAgQVAggDBBYCAwECHgECF4AACgkQ
+hAKD0aAcifVqkwP+IMJeawsgjDwxfxgHdttVIxrfYTy5Jwpwqs6DCD5bmg3L8r8jENloFNwv
+VI5yZRcSPOSsCMXJntxJk+BYCLl1XHn3T1rHypi8tfaK40oU3jpVcLL1j5P4jlFMqVqLDhqu
+yFSqKukRMIoO2GGBPzahwsZGpJiF4DGitTQtsj6PSxo=
+=sh8m
+-----END PGP PUBLIC KEY BLOCK-----""",
      "encryption" : 0, "type" : 3}]
 
 languages = ["texinfo", "octave", "sql", "latex", "cpp",
@@ -73,7 +88,6 @@ tables = [
     CREATE TABLE IF NOT EXISTS `types` (
     `typeid` INTEGER PRIMARY KEY,
     `type` varchar(40) NOT NULL,
-    `image` varchar(255),
     `encrypt_default` boolean DEFAULT 0)
     """,
     

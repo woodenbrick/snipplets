@@ -64,7 +64,7 @@ class CreateNewHandler():
         liststore = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf)
         for type in types:
             liststore.append([type[1], gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR +
-                                                                    type[2])])
+                                                                    type[1].lower() + ".png")])
          
         combobox = self.wTree.get_widget("type")
         combobox.set_model(liststore)
