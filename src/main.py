@@ -71,8 +71,8 @@ class MainHandler():
     def create_selection_area(self):
         self.selection_columns = ["id", "", "Description", "Modified", "Encryption", "Type"]
         self.selection_liststore = gtk.ListStore(int, gtk.gdk.Pixbuf, str, str, int, str)
-        self.selection_view.set_model(self.selection_liststore)
         self.selection_filter = self.selection_liststore.filter_new()
+        self.selection_view.set_model(self.selection_filter)
         snipplets = self.db.return_snipplet_selection()
         for row in snipplets:
             #liststore: int, gtk.gdk.Pixbuf, str, int, str, bool
@@ -126,7 +126,7 @@ class MainHandler():
         self.type_view.set_model(liststore)
         columns = ["id", "pic", "type"]
         for i in range(0, len(columns)):
-            col = gtk.TreeViewColumn(columns[i])
+            col = gtk.TreeViewColumn(None)
             if columns[i] == "pic":
                 cell = gtk.CellRendererPixbuf()
             else:
@@ -136,8 +136,8 @@ class MainHandler():
                 col.set_attributes(cell, pixbuf=i)
             else:
                 col.set_attributes(cell, text=i)
-            #if columns[i] == "id":
-            #    col.set_visible(False)
+            if columns[i] == "id":
+                col.set_visible(False)
             self.type_view.append_column(col)
         self.type_view.get_selection().select_path(0)
             
@@ -149,15 +149,13 @@ class MainHandler():
             self.show_types = self.types
         else:
             self.show_types = [type]
-        print "-" * 10
-        print self.show_types
         self.selection_filter.refilter()
         #we should also make sure that a valid selection is shown
         #or blank if the user has emptied all possibilites
-        return
+        self.selection_view.get_selection().select_path(0)
+        self.on_selection_cursor_changed(None)
     
-    def check_selection_visibility(self, model, iter):
-        print model.get_value(iter, 5) in self.show_types, model.get_value(iter, 2)    
+    def check_selection_visibility(self, model, iter):  
         return model.get_value(iter, 5) in self.show_types
 
 
@@ -176,12 +174,14 @@ class MainHandler():
         """Fill the data box with the snipplet selected"""
         #self.snipplet_data_liststore.clear()
         model, iter = self.selection_view.get_selection().get_selected()
-        snipid = model.get_value(iter, 0)
-        data = self.db.return_snipplet_data(snipid)
-        #check if we have a code snipplet
-        if data[1] == 1:
+        try:
+            snipid = model.get_value(iter, 0)
+            data = self.db.return_snipplet_data(snipid)
+            #check if we have a code snipplet
             self.data_view.set_buffer(self.code_syntax.set_buffer_language(data[4]))
-        self.data_view.get_buffer().set_text(data[0])
+            self.data_view.get_buffer().set_text(data[0])
+        except TypeError:
+            self.data_view.get_buffer().set_text("")
         
     def on_selection_row_activated(self, widget, path=None, column=None):
         """User double clicks, show the current snipplet in an edit box"""

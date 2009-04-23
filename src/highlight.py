@@ -34,8 +34,8 @@ class HighLighter(object):
 
     def set_buffer_language(self, syntax_chosen):
         """Returns a buffer set to the correct language"""
-        if syntax_chosen < 0:
-            syntax_chosen = 2
+        if syntax_chosen < 1:
+            return gtk.TextBuffer()
         lang = SyntaxLoader(self.filetypes[syntax_chosen])
         buffer = CodeBuffer(lang=lang)
         return buffer
