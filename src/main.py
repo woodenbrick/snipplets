@@ -162,12 +162,13 @@ class MainHandler():
     def update_selection_view(self, dict, id=None):
         """called when the user creates a new snipplet"""
         row = self.db.return_most_recent_snipplet()
-        row1 = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1])
+        row1 = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1].lower() + ".png")
         #if we have an id, it means it was an edited so dont add again just update
         if id:
-            self.selection_liststore.remove(self.edit_iter)
+            iter = self.selection_filter.convert_iter_to_child_iter(self.edit_iter)
+            self.selection_liststore.remove(iter)
         row3 = nicetime(row[3])
-        self.selection_liststore.prepend([row[0], row1, row[2], row3, row[4]])
+        self.selection_liststore.prepend([row[0], row1, row[2], row3, row[4], row[1]])
 
     
     def on_selection_cursor_changed(self, widget):
@@ -201,7 +202,9 @@ class MainHandler():
             model, iter = self.selection_view.get_selection().get_selected()
             snipid = model.get_value(iter, 0)
             self.db.delete(snipid)
-            model.remove(iter)
+            child_model = model.get_model()
+            child_model_iter = model.convert_iter_to_child_iter(iter)
+            self.selection_liststore.remove(child_model_iter)
             self.update_status("Snipplet deleted")
         popup.destroy()
 
@@ -216,14 +219,25 @@ class MainHandler():
         self.clipboard.set_text(buffer.get_text(start, end))
         self.update_stats("Snipplet copied to clipboard")
         
-    def on_export_clicked(self, widget):
-        """Save snipplet dialog"""
-        self.file_selection = gtk.FileChooserDialog(title="Save snipplet", parent=None, 
-                                                    action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                                                    buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-                                                             gtk.STOCK_SAVE,gtk.RESPONSE_OK),
+    def on_import_export_clicked(self, widget):
+        """Deals with importing and exporting snipplets"""
+        
+        export_buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                          gtk.STOCK_SAVE, gtk.RESPONSE_OK)
+        import_buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                          gtk.STOCK_OK, gtk.RESPONSE_OK)
+        options = { "export_selected" : ["Export snipplet as", export_buttons,
+                                         gtk.FILE_CHOOSER_ACTION_SAVE],
+            "export_all" : ["Export all as", export_buttons,
+                            gtk.FILE_CHOOSER_ACTION_SAVE],
+            "import" : ["Import snipplets file", import_buttons,
+                        gtk.FILE_CHOOSER_ACTION_OPEN]}
+        
+        option = options[widget.name]
+        self.file_selection = gtk.FileChooserDialog(title=option[0], parent=None, 
+                                                    action=option[2], buttons=option[1],
                                                     backend=None)
-        self.file_selection.set_current_name(self.get_possible_filename())
+        #self.file_selection.set_current_name(self.get_possible_filename(widget))
         filter = gtk.FileFilter()
         filter.set_name("Snipplet (.snip)")
         filter.add_pattern("*.snip")
@@ -235,36 +249,64 @@ class MainHandler():
         
         response = self.file_selection.run()
         if response == gtk.RESPONSE_OK:
-            #create an xml document
+            if widget.name == "import":
+                self.import_xml_doc(self.file_selection.get_filename())
+            else:
+                self.create_xml_doc(widget)
+        self.file_selection.destroy()
+        
+    def create_xml_doc(self, widget):
+        """creates an xml document for export, either a single snipplet or all"""
+        if widget.name == "export_all":
+            rows = self.db.return_snipplet_data(None)
+        else:
             model, iter = self.selection_view.get_selection().get_selected()
             snipid = model.get_value(iter, 0)
-            rows = self.db.return_snipplet_data(snipid)
-            root = ET.Element("snipplets")
+            rows = [self.db.return_snipplet_data(snipid)]
+        root = ET.Element("snipplets")
+        for row in rows:
             el_snipplet = ET.SubElement(root, "snipplet")
-            type = ET.SubElement(el_snipplet, "typeid")
-            type.text = str(rows[1])
+            type = ET.SubElement(el_snipplet, "type")
+            type.text = str(row[1])
             des = ET.SubElement(el_snipplet, "description")
-            des.text = rows[2]
+            des.text = row[2]
             data = ET.SubElement(el_snipplet, "data")
-            data.text = rows[0]
+            data.text = row[0]
             enc = ET.SubElement(el_snipplet, "encryption")
-            enc.text = str(rows[3])
+            enc.text = str(row[3])
             lang = ET.SubElement(el_snipplet, "language")
-            lang.text = str(rows[4])
+            lang.text = str(row[4])
             mod = ET.SubElement(el_snipplet, "modified")
-            mod.text = str(rows[5])
+            mod.text = str(row[5])
             tags = ET.SubElement(el_snipplet, "tags")
             t = ['testtag1', 'testtag2']
             for tag in t:
                 cur = ET.SubElement(tags, "tag")
                 cur.text = tag
-            print self.file_selection.get_filename()
-            tree = ET.ElementTree(root)
-            tree.write(self.file_selection.get_filename())
-        self.file_selection.destroy()
+        #'<?xml version="1.0" encoding="UTF-8"?>'
+        tree = ET.ElementTree(root)
+        tree.write(self.file_selection.get_filename())
+    
+    def import_xml_doc(self, doc):
+        """imports a .snip files into your database
+        data will be crosschecked and if it already exists will be ignored"""
+        tree = ET.parse(doc)
+        root = tree.getroot()
+        for child in root:
+            snipplet = child.getiterator()
+            snipplet_dict = {}
+            for piece in snipplet:
+                snipplet_dict[piece.tag] = piece.text
+            self.db.add_new(snipplet_dict)
+            self.update_selection_view(snipplet_dict)
         
-    def get_possible_filename(self):
+    
+    def get_possible_filename(self, widget):
         """Default name for exported snipplet"""
+        if widget.name == "export_all":
+            return "all_snipplets.snip"
+        if widget.name == "import":
+            return ""
         model, iter = self.selection_view.get_selection().get_selected()
         desc = model.get_value(iter, 2)
         desc = ("".join(desc.split(" ")) + ".snip").lower()
@@ -303,5 +345,4 @@ class MainHandler():
         types = self.db.return_all("types")
         tags = self.db.return_all("tags")
         
-            
-        
+

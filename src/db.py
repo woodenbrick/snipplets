@@ -81,8 +81,12 @@ class DbSnipplet(object):
         return self.cursor.fetchall()
     
     
-    def return_snipplet_data(self, id):
-        """Retrieves the data for snipplet with this id"""
+    def return_snipplet_data(self, id=None):
+        """Retrieves the data for snipplet with this id or all"""
+        if id is None:
+            self.cursor.execute("""select data, typeid, description, encryption, language, modified
+                            from snipplets""")
+            return self.cursor.fetchall()
         self.cursor.execute("""select data, typeid, description, encryption, language, modified
                             from snipplets where snippletid=?""", (id,))
         
@@ -94,7 +98,7 @@ class DbSnipplet(object):
     def add_new(self, snipplet_obj):
         self.cursor.execute("""INSERT INTO snipplets (typeid, description,
                             data, encryption, language, modified) VALUES (:type, :description, :data,
-                            :encryption, :code_syntax, datetime('now', 'localtime'))""",
+                            :encryption, :language, datetime('now', 'localtime'))""",
                             snipplet_obj)
         self.db.commit()
     
@@ -109,7 +113,7 @@ class DbSnipplet(object):
     def edit(self, snipplet_obj):
         self.cursor.execute("""UPDATE snipplets set typeid=:type,
                             description=:description, data=:data,
-                            encryption=:encryption, language=:code_syntax,
+                            encryption=:encryption, language=:language,
                             modified=datetime('now', 'localtime')
                             where snippletid=:snippletid""", snipplet_obj)
         self.db.commit()

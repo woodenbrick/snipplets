@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Apr 23 20:56:22 2009 -->
+<!--Generated with glade3 3.4.5 on Fri Apr 24 13:42:18 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="window_position">GTK_WIN_POS_CENTER</property>
@@ -24,6 +24,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">New Snipplet</property>
                         <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_create_snipplet_clicked"/>
                         <child internal-child="image">
                           <widget class="GtkImage" id="menu-item-image13">
                             <property name="stock">gtk-new</property>
@@ -32,11 +33,36 @@
                       </widget>
                     </child>
                     <child>
+                      <widget class="GtkMenuItem" id="export_selected">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Export Selected</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_import_export_clicked"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="import">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Import</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_import_export_clicked"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="export_all">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Export All</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_import_export_clicked"/>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkImageMenuItem" id="imagemenuitem5">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">gtk-quit</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_window_destroy"/>
                       </widget>
                     </child>
                   </widget>
@@ -56,6 +82,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Copy selected snipplet</property>
                         <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_copy_clicked"/>
                         <child internal-child="image">
                           <widget class="GtkImage" id="menu-item-image11">
                             <property name="visible">True</property>
@@ -69,6 +96,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Delete selected snipplet</property>
                         <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_delete_clicked"/>
                         <child internal-child="image">
                           <widget class="GtkImage" id="menu-item-image12">
                             <property name="stock">gtk-delete</property>

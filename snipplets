@@ -12,7 +12,8 @@ if os.path.abspath(__file__) == "/usr/bin/snipplets":
     import snipplets
 else:
     import src.snipplets as snipplets
-__author__ = ("Daniel Woodhouse <wodemoneke@gmail.com>")
+__author__ = ("Daniel Woodhouse",)
+__email__ = ("<wodemoneke@gmail.com>",)
 __version__ = "0.03"
 
 parser = optparse.OptionParser(version="snipplets %s by %s" % (__version__, ', '.join(__author__)))

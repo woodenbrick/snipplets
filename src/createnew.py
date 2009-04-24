@@ -51,11 +51,11 @@ class CreateNewHandler():
         start, end = old_buff.get_bounds()
         text = old_buff.get_text(start, end)
         if self.wTree.get_widget("type").get_active() == 0:    
-            self.wTree.get_widget("code_syntax").show()
-            active_code = self.wTree.get_widget("code_syntax").get_active()
+            self.wTree.get_widget("language").show()
+            active_code = self.wTree.get_widget("language").get_active()
             buff = self.code_syntax.set_buffer_language(active_code)
         else:
-            self.wTree.get_widget("code_syntax").hide()
+            self.wTree.get_widget("language").hide()
             buff = gtk.TextBuffer()
         self.wTree.get_widget("data").set_buffer(buff)
         buff.set_text(text)
@@ -83,7 +83,7 @@ class CreateNewHandler():
         for lang in self.code_syntax.filetypes:
             liststore.append([lang])
 
-        combobox = self.wTree.get_widget("code_syntax")
+        combobox = self.wTree.get_widget("language")
         combobox.set_model(liststore)
         text = gtk.CellRendererText()
         combobox.pack_start(text)
@@ -121,7 +121,7 @@ class NewSnipplet(object):
     
     def __init__(self):
         self.values = {"type" : 1, "description" : "",
-                       "data" : "", "code_syntax" : "", "encryption" : False }
+                       "data" : "", "language" : "", "encryption" : False }
         
     
     def set_widgets(self, tree):
@@ -136,7 +136,7 @@ class NewSnipplet(object):
         keys = []
         for key, value in self.values.items():
             if value is "":
-                if key == "code_syntax" and self.values["type"] != 0:
+                if key == "language" and self.values["type"] != 0:
                     continue
                 keys.append(key)
         if keys == []:
@@ -155,9 +155,9 @@ class NewSnipplet(object):
         self.values["type"] = self.widgets["type"].get_active() + 1
         self.values["encryption"] = self.widgets["encryption"].get_active()
         #if self.values["type"] == 1:
-        self.values["code_syntax"] = self.widgets["code_syntax"].get_active()
+        self.values["language"] = self.widgets["language"].get_active()
         #else:
-        #    self.values["code_syntax"] = ""
+        #    self.values["language"] = ""
     
     def old_snipplet_reborn(self, data):
         buffer = self.widgets["data"].get_buffer()
@@ -167,4 +167,4 @@ class NewSnipplet(object):
         self.widgets["encryption"].set_active(data[3])
         if data[1] - 1 == 0:
             #code widget
-            self.widgets["code_syntax"].set_active(data[4])
+            self.widgets["language"].set_active(data[4])
