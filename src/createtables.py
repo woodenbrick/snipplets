@@ -31,10 +31,10 @@ test_data = [
      your little snippets of data in order.""",
      "encryption" : 0, "type" : 2},
     {"description" : "Sample python code", "data" : """
-     def Test():
-         if x == 1:
-             print x
-            """,
+def Test():
+    if x == 1:
+        print x
+""",
      "encryption" : 0, "type" : 1, "language" : 21 },
     {"description" : "Snipplets PPA Public Key", "data" : """
 -----BEGIN PGP PUBLIC KEY BLOCK-----

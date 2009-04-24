@@ -41,8 +41,8 @@ class DbSnipplet(object):
                            VALUES (:type, :encrypt_default)""",
                            createtables.types)
         cursor.executemany("""INSERT INTO snipplets (typeid, description, data,
-                           encryption, modified) VALUES (:type, :description,
-                           :data, :encryption, datetime('now', 'localtime'))""",
+                           encryption, modified, language) VALUES (:type, :description,
+                           :data, :encryption, :language, datetime('now', 'localtime'))""",
                            createtables.test_data)
         for language in createtables.languages:
             cursor.execute("""INSERT INTO languages (language, lastused) VALUES
