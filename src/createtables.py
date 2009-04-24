@@ -29,7 +29,7 @@ types = [
 test_data = [
     {"description" : "Welcome to Snipplets!", "data" : """Snipplets is an easy way to keep
      your little snippets of data in order.""",
-     "encryption" : 0, "type" : 2},
+     "encryption" : 0, "type" : 2, "language" : 0},
     {"description" : "Sample python code", "data" : """
 def Test():
     if x == 1:
@@ -49,7 +49,7 @@ VI5yZRcSPOSsCMXJntxJk+BYCLl1XHn3T1rHypi8tfaK40oU3jpVcLL1j5P4jlFMqVqLDhqu
 yFSqKukRMIoO2GGBPzahwsZGpJiF4DGitTQtsj6PSxo=
 =sh8m
 -----END PGP PUBLIC KEY BLOCK-----""",
-     "encryption" : 0, "type" : 3}]
+     "encryption" : 0, "type" : 3, "language" : 0}]
 
 languages = ["texinfo", "octave", "sql", "latex", "cpp",
         "fortran", "markdown", "msil", "html", "lua", "vhdl", "diff",
