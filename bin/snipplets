@@ -1,0 +1,102 @@
+#! /usr/bin/env python
+import os
+import sys
+import optparse
+import gtk
+import pygtk
+pygtk.require("2.0")
+import gtk.glade
+import gobject
+
+__author__ = ("Daniel Woodhouse",)
+__version__ = "0.05"
+
+parser = optparse.OptionParser(version="snipplets %s by %s" %
+                               (__version__, ', '.join(__author__)))
+parser.add_option('--error-log', '-e', action="store_true",
+                  help="logs all stderr messages to ~/.snipplets/error.log")
+parser.add_option('--start-minimised', '-m', action="store_true",
+                  help="start the snipplet program minimised to the dock")
+
+options, args = parser.parse_args()
+
+#decide if we have been distributed in a deb or sitting in the source dir
+bin_path = os.path.dirname(os.path.abspath(__file__))
+if bin_path != "/usr/bin":
+    src_path = os.path.split(bin_path)[0]
+    sys.path.append(os.path.join(src_path))
+    UI_DIR = os.path.join(src_path, "snipplets", "ui")
+else:
+    UI_DIR = os.path.join("/usr", "share", "snipplets")
+print UI_DIR
+from snipplets.main import MainHandler
+from snipplets.createnew import CreateNewHandler
+from snipplets.db import DbSnipplet
+from snipplets.highlight import HighLighter
+
+class RunSnipplets(object):
+
+    def __init__(self):
+        self.GLADE_DIR = os.path.join(UI_DIR, "glade") + os.sep
+        self.IMAGES_DIR = os.path.join(UI_DIR, "images") + os.sep
+        print self.GLADE_DIR
+        try:
+            self.HOME_DIR = os.path.join(os.environ['HOME'], ".snipplets" + os.sep)
+        except KeyError:
+            #windows
+            self.HOME_DIR = os.path.join(os.environ['HOMEPATH'], ".snipplets" +
+                                         os.sep)
+        try:
+            os.mkdir(self.HOME_DIR)
+        except:
+            pass
+        
+        self.clipboard = gtk.Clipboard()
+        self.db = DbSnipplet(self.HOME_DIR + "DEVsnippletsDB")
+        #define codecompletion object here for use by all children
+        self.code_syntax = HighLighter(self.db)
+        self.create_main_window()
+        
+        self.tray_icon = gtk.StatusIcon()
+        self.tray_icon.set_from_file(self.IMAGES_DIR + "snipplets.png")
+        self.tray_icon.connect("activate", self.activate_menu, None)
+        self.tray_icon.connect("popup-menu", self.popup_menu, None)
+        
+        self.wTree_menu = gtk.glade.XML(self.GLADE_DIR + "notification_menu.glade")
+        self.wTree_menu.signal_autoconnect(self)
+        self.right_click_menu = self.wTree_menu.get_widget("status_menu")
+        if not options.start_minimised:
+            self.on_show_snipplets_activate(None)
+        
+
+    def activate_menu(self, *args):
+        if self.main_window.window.props.visible:
+            self.main_window.window.hide()
+        else:
+            self.main_window.window.show()
+        
+    def popup_menu(self, *args):
+        self.right_click_menu.popup(parent_menu_shell=None, parent_menu_item=None,
+                                    func=gtk.status_icon_position_menu,
+                                        button=args[1], activate_time=args[2],
+                                        data=self.tray_icon)
+
+    def on_show_snipplets_activate(self, widget):
+        self.main_window.window.present()
+    
+    def create_main_window(self):
+        self.main_window = MainHandler(self, "snipplets.glade")
+
+    def gtk_main_quit(self, widget=None):
+        gtk.main_quit()
+    
+    def update_selection_view(self, data, id):
+        self.main_window.update_selection_view(data, id)
+        
+
+    def create_new_snipplet_window(self, widget=None, id=None):
+        self.create_new_window = CreateNewHandler(self, "create_new_snipplet.glade", id=id)
+
+
+RunSnipplets()
+gtk.main()
