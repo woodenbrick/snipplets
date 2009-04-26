@@ -8,10 +8,10 @@ import glob
 PROGRAM_NAME = 'snipplets'
 VERSION = '0.05'
 
-glade  = glob.glob(os.path.join(os.getcwd(), "src", "snipplets", "ui", "glade", "*.glade"))
-images = glob.glob(os.path.join(os.getcwd(), "src", "snipplets", "ui", "images", "*.png"))
-print glade
-print images
+glade  = glob.glob(os.path.join(os.getcwd(), "snipplets", "ui", "glade", "*.glade"))
+images = glob.glob(os.path.join(os.getcwd(), "snipplets", "ui", "images", "*.png"))
+syntax_files = glob.glob(os.path.join(os.getcwd(), "snipplets", "codebuffer",
+                                      "syntax", "*.xml"))
 desc = """Organise your snipplets of data"""
 
 long_desc = """Long Desc"""
@@ -24,10 +24,11 @@ setup ( name = PROGRAM_NAME,
 	    license = 'GPLv3',
         platforms = ['Linux'],
         url = 'http://github.com/woodenbrick/snipplets',
-        packages = ['snipplets'],
+        packages = ['snipplets', 'snipplets/codebuffer'],
         data_files = [
             ('share/applications/', ['extras/snipplets.desktop']),  
             ('share/snipplets/glade', glade),
             ('share/snipplets/images', images),
-            ('bin/', ['snipplets'])
+            ('bin/', ['bin/snipplets']),
+            ('share/snipplets/syntax', syntax_files)
         ])
