@@ -16,7 +16,7 @@
 #
 #You should have received a copy of the GNU General Public License
 #along with snipplets.  If not, see http://www.gnu.org/licenses/
-
+import os
 import gtk
 import pygtk
 import gobject
@@ -75,8 +75,7 @@ class MainHandler():
         self.selection_view.set_model(self.selection_filter)
         snipplets = self.db.return_snipplet_selection()
         for row in snipplets:
-            #liststore: int, gtk.gdk.Pixbuf, str, int, str, bool
-            #rows: id, typeimage, description, encryption, modified, visible
+            #id, type, description, modified, encryption
             row3 = nicetime(row[3])
             image = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1].lower() + ".png")
             self.selection_liststore.append([row[0], image, row[2], row3, row[4], row[1]])
@@ -219,6 +218,19 @@ class MainHandler():
         self.clipboard.set_text(buffer.get_text(start, end))
         self.update_stats("Snipplet copied to clipboard")
         
+    def on_import_key_clicked(self, widget):
+        """Adds the key to your trusted repositories"""
+        buffer = self.wTree.get_widget("data").get_buffer()
+        start, end = buffer.get_bounds()
+        key = buffer.get_text(start, end)
+        temp_key_file = self.parent.HOME_DIR + "snipplets_key"
+        f = open(temp_key_file, "w")
+        f.writelines(key)
+        f.close()
+        os.system("gksu apt-key add %s" % temp_key_file)
+        os.remove(temp_key_file)
+        
+        
     def on_import_export_clicked(self, widget):
         """Deals with importing and exporting snipplets"""
         
@@ -315,20 +327,10 @@ class MainHandler():
     def file_sel_save(self, widget):
         print widget
         
-    def file_sel_destroy(self, widget):
-        self.file_selection.destroy()
-        
-        
-        #filechooser = self.wTree.get_widget("filechooser")
-        #filechooser.set_current_name(self.get_possible_filename())
-        #filechooser.run()
-        #filechooser.hide()
-        #    
-    def on_file_saver_event(self, widget):
-        pass
-        #filename = self.wTree.get_widget("
-        
-    
+    #def file_sel_destroy(self, widget):
+    #    self.file_selection.destroy()
+    #    
+
     def update_status(self, text):
         pass
         #self.wTree.get_widget("status_bar").set_text(text)
@@ -336,13 +338,8 @@ class MainHandler():
         
     def clear_status(self):
         self.wTree.get_widget("status_bar").set_text("")
-   
-
-   
-    def show_snipplets(self):
-        """fetches and calculates all types,tags and snipplets info and creates
-        snipplet objects"""
-        types = self.db.return_all("types")
-        tags = self.db.return_all("tags")
         
-
+        
+    def on_about_clicked(self, widget):
+        self.wTree.get_widget("aboutdialog").run()
+        self.wTree.get_widget("aboutdialog").hide()

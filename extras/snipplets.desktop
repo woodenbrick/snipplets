@@ -7,4 +7,4 @@ Exec=/usr/bin/snipplets -e
 Terminal=false
 Categories=Office;
 StartupNotify=false
-Icon=/usr/share/snipplets/ui/images/snipplets.png
+Icon=/usr/share/snipplets/images/snipplets.png

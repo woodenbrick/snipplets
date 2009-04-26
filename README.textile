@@ -1,13 +1,10 @@
 h2. Snipplets
 
-A dropdown menu to store snippets of data such as:
-* code
-* phone/ni/serial numbers
-* passwords
-* gpg keys, with the option to import them
-* anything the user wants to define
+A cross platform databank to store snippets of data such as
+* code (with syntax highlighting)
+* gpg keys, with the option to import them into apt
 
+Snipplets are importable/exportable as XML. Future releases will including tagging, search and encryption.
 
-Items will be taggable and encyptable.
-
-This is a very basic release 0.3 with many missing features, however the base creation and editing works correctly.
+The program can be run from the source directory with the run_snipplets executable, or installed using sudo python setup.py install
+There is also a "PPA repository for Ubuntu/Debian users":https://launchpad.net/~snipplets/+archive/ppa

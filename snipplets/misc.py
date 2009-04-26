@@ -23,7 +23,6 @@ def nicetime(past_time, fuzzy=True, length=2):
     """Takes time in the form of 2009-12-04 14:55:02 and
     returns a nicely formatted string 2 hours ago...etc.
     fuzzy will leave todays times as Today <time>"""
-    
     past_time = time.strptime(past_time, "%Y-%m-%d %H:%M:%S")
     ptime = str(past_time[3]) + ":" + str(past_time[4])
     current_time = time.localtime()
