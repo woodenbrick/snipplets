@@ -6,5 +6,5 @@ A cross platform databank to store snippets of data such as
 
 Snipplets are importable/exportable as XML. Future releases will including tagging, search and encryption.
 
-The program can be run from the source directory with the run_snipplets executable, or installed using sudo python setup.py install
+The program can be run from source from the bin directory, or installed using sudo python setup.py install
 There is also a "PPA repository for Ubuntu/Debian users":https://launchpad.net/~snipplets/+archive/ppa
