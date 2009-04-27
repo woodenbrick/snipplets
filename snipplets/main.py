@@ -1,4 +1,4 @@
-# mainsnipplet.py
+# main.py
 #
 # Copyright 2009 Daniel Woodhouse
 #
@@ -54,6 +54,7 @@ class MainHandler():
         combobox.set_active(0)
         
         self.create_selection_area()
+        self.selection_area_add_columns()
         self.fill_types()
         
 
@@ -79,8 +80,8 @@ class MainHandler():
             row3 = nicetime(row[3])
             image = gtk.gdk.pixbuf_new_from_file(self.parent.IMAGES_DIR + row[1].lower() + ".png")
             self.selection_liststore.append([row[0], image, row[2], row3, row[4], row[1]])
-                
-        #append to columns
+        
+    def selection_area_add_columns(self):
         i = 0
         for column in self.selection_columns:
             col = gtk.TreeViewColumn(column)
@@ -302,6 +303,7 @@ class MainHandler():
     def import_xml_doc(self, doc):
         """imports a .snip files into your database
         data will be crosschecked and if it already exists will be ignored"""
+        print doc
         tree = ET.parse(doc)
         root = tree.getroot()
         for child in root:
@@ -310,8 +312,8 @@ class MainHandler():
             for piece in snipplet:
                 snipplet_dict[piece.tag] = piece.text
             self.db.add_new(snipplet_dict)
-            self.update_selection_view(snipplet_dict)
-        
+        #reload all snipplets
+        self.create_selection_area()
     
     def get_possible_filename(self, widget):
         """Default name for exported snipplet"""
