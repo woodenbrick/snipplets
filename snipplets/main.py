@@ -311,6 +311,8 @@ class MainHandler():
             snipplet_dict = {}
             for piece in snipplet:
                 snipplet_dict[piece.tag] = piece.text
+                print snipplet_dict
+            print snipplet_dict, "DICKY"
             self.db.add_new(snipplet_dict)
         #reload all snipplets
         self.create_selection_area()
