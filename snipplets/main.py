@@ -302,6 +302,7 @@ class MainHandler():
     def import_xml_doc(self, doc):
         """imports a .snip files into your database
         data will be crosschecked and if it already exists will be ignored"""
+        print doc
         tree = ET.parse(doc)
         root = tree.getroot()
         for child in root:
@@ -309,6 +310,8 @@ class MainHandler():
             snipplet_dict = {}
             for piece in snipplet:
                 snipplet_dict[piece.tag] = piece.text
+                print snipplet_dict
+            print snipplet_dict, "DICKY"
             self.db.add_new(snipplet_dict)
             self.update_selection_view(snipplet_dict)
         
