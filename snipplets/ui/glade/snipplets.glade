@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Apr 26 17:58:59 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Apr 28 12:55:05 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="window_position">GTK_WIN_POS_CENTER</property>
@@ -116,6 +116,15 @@
                         </child>
                       </widget>
                     </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="options">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">gtk-preferences</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_options_activate"/>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -195,11 +204,32 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Create New Snipplet</property>
                         <property name="response_id">0</property>
                         <signal name="clicked" handler="on_create_snipplet_clicked"/>
+                        <child>
+                          <widget class="GtkHBox" id="hbox3">
+                            <property name="visible">True</property>
+                            <property name="spacing">4</property>
+                            <child>
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-new</property>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label1">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">New Snipplet</property>
+                              </widget>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -457,11 +487,11 @@
     <property name="comments" translatable="yes">Keep your snippets of data organised</property>
     <property name="website">http://www.launchpad.net/snipplets</property>
     <property name="website_label" translatable="yes">Snipplets on launchpad</property>
-    <property name="license">MTP-Lastfm is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+    <property name="license">Snipplets is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-MTP-Lastfm is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+Snipplets is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with MTP-Lastfm.  If not, see http://www.gnu.org/licenses/</property>
+You should have received a copy of the GNU General Public License along with Snipplets,  If not, see http://www.gnu.org/licenses/</property>
     <property name="authors"></property>
     <property name="artists">Everaldo Coelho
 Marco Martin

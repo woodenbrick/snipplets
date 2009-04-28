@@ -20,7 +20,7 @@ parser.add_option('--start-minimised', '-m', action="store_true",
 
 options, args = parser.parse_args()
 
-#decide if we have been distributed in a deb or sitting in the source dir
+#wheres the source
 bin_path = os.path.dirname(os.path.abspath(__file__))
 if bin_path != "/usr/bin":
     src_path = os.path.split(bin_path)[0]
@@ -28,12 +28,12 @@ if bin_path != "/usr/bin":
     UI_DIR = os.path.join(src_path, "snipplets", "ui")
 else:
     UI_DIR = os.path.join("/usr", "share", "snipplets")
-print UI_DIR
+
 from snipplets.main import MainHandler
 from snipplets.createnew import CreateNewHandler
 from snipplets.db import DbSnipplet
 from snipplets.highlight import HighLighter
-
+from snipplets.options import Options
 class RunSnipplets(object):
 
     def __init__(self):
@@ -50,6 +50,10 @@ class RunSnipplets(object):
             os.mkdir(self.HOME_DIR)
         except:
             pass
+        
+        #define options
+        self.options = Options(self.HOME_DIR)
+        print "Options", self.options
         
         self.clipboard = gtk.Clipboard()
         self.db = DbSnipplet(self.HOME_DIR + "DEVsnippletsDB")

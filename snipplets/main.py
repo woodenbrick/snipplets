@@ -23,8 +23,8 @@ import gobject
 pygtk.require("2.0")
 import time
 from xml.etree import ElementTree as ET
-from misc import nicetime
 
+from misc import nicetime
 
 class MainHandler():
     
@@ -324,12 +324,8 @@ class MainHandler():
         desc = ("".join(desc.split(" ")) + ".snip").lower()
         return desc
 
-    def file_sel_save(self, widget):
-        print widget
-        
-    #def file_sel_destroy(self, widget):
-    #    self.file_selection.destroy()
-    #    
+    def on_options_clicked(self, widget):
+        pass
 
     def update_status(self, text):
         pass
